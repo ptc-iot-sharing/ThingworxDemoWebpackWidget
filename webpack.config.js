@@ -26,7 +26,7 @@ module.exports = {
         }),
         // in case we just want to copy some resources directly to the widget package, then do it here
         new CopyWebpackPlugin([
-            { from: 'src/static', to: 'mxgraph' }
+            { from: 'src/static', to: 'static' }
         ]),
     ],
 
