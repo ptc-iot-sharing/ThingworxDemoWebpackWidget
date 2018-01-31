@@ -1,6 +1,6 @@
 # Starter kit of a widget using webpack and typescript
 
-This repository contains an example that can act as a starter kit for building widget using modern web developement techniques like [webpack](https://webpack.js.org/) and [typescript](https://www.typescriptlang.org/).
+This repository contains an example that can act as a starter kit for building widget using modern web developement techniques like [webpack](https://webpack.js.org/) and [typescript](https://www.typescriptlang.org/) and [babel](https://babeljs.io/).
 
 There are many advantages to this, and here's some of them:
 
@@ -37,7 +37,8 @@ demoWebpackTypescriptWidget
 │   │   demoWebpack.ide.ts     // source file for the Composer section of the widget
 │   │   demoWebpack.runtime.ts // source file for the Runtime section of the widget
 │   └───internalLogic          // usually, put the enternal logic into a separate namespace
-│   │   │   file1.ts
+│   │   │   file1.ts           // typescript file with internal logic
+│   │   │   file2.js           // javascript file in ES2015 with modules  
 │   │   │   ...
 │   └───styles        // folder for css styles that you can import into your app using require statements
 │   └───images        // folder for resources that are copied over to the development extension. Think of folder of images that you referece only dynamicaly
