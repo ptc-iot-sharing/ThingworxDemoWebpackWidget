@@ -60,14 +60,14 @@ The following changes need to be done when you start developing a widget:
 
 ### Adding dependencies
 
-Dependencies can be added from [npm](https://www.npmjs.com/), using the `npm install DEPENDENCY_NAME --save` command, or by adding them directly to package.json, under `dependencies`.
+Dependencies can be added from [npm](https://www.npmjs.com/), using the `npm install DEPENDENCY_NAME --save` command, or by adding them directly to `package.json`, under `dependencies`. After adding them to `package.json`, you should run `npm install`.
 If you are using a javascript library that also has typescript mappings you can install those using `npm install --save @types/DEPENDENCY_NAME`. 
 
 ### Building and publishing
 
 The following commands allow you to build and compile your widget:
-* `npm build`: builds the extension
-* `npm watch`: watches the source files, and whenever they change, do a build
-* `npm packageExtension`: executed after a `npm build`, or while `npm watch` is running, it creates a zip file inside the `zip` directory
-* `npm upload`: same as `npm packageExtension`, but also uploads the widget to the configured thingworx
+* `npm run build`: builds the extension
+* `npm run watch`: watches the source files, and whenever they change, do a build
+* `npm run packageExtension`: executed after a `npm run build`, or while `npm watch` is running, it creates a zip file inside the `zip` directory
+* `npm run upload`: same as `npm run packageExtension`, but also uploads the widget to the configured thingworx
 
