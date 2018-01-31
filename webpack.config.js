@@ -21,7 +21,7 @@ module.exports = {
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             name: "windgetRuntime",
-            async: true, 
+            async: true,
             children: true
         }),
         // in case we just want to copy some resources directly to the widget package, then do it here
@@ -40,6 +40,16 @@ module.exports = {
 
     module: {
         rules: [
+            {
+                test: /(\.jsx|\.js)$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {
                 test: /\.tsx?$/,
@@ -47,14 +57,16 @@ module.exports = {
                 exclude: /node_modules/
             },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+            {
+                enforce: "pre", test: /\.js$/, loader: "source-map-loader"
+            },
             {
                 test: /\.(png|jp(e*)g|svg|xml)$/,
                 loader: 'url-loader?limit=30000&name=images/[name].[ext]'
             },
             {
                 test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]               
+                use: ['style-loader', 'css-loader']
             },
 
         ]
