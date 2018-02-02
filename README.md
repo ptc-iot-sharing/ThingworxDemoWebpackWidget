@@ -20,6 +20,15 @@ Typescript is a superscript of javascript with types.
 * Great tooling support with IntelliSense
 
 ## Using the widget template
+
+### Necessary software
+
+The following software is required:
+* [NodeJS](https://nodejs.org/en/) needs to be installed and added to the `PATH`.
+
+The following software is recommended:
+* [Visual Studio Code](https://code.visualstudio.com/): An integrated developer enviroment with great typescript support. 
+
 ### Proposed folder structure
 
 ```
@@ -58,6 +67,8 @@ The following changes need to be done when you start developing a widget:
 * Change the thingworx server used to publish the widget
   * Inside `build.gradle`, configure the thingworx settings under `project.ext`
 * Rename the `demoWebpack.ide.ts` and `demoWebpack.runtime.ts` accordingly.
+
+After all the necessary changes are done, run `npm install`. 
 
 ### Adding dependencies
 
