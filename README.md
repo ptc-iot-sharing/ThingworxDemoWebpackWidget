@@ -61,8 +61,11 @@ The following changes need to be done when you start developing a widget:
 * Change the name of the widget
   * Inside `package.json`, the `name` field
   * Inside `settings.gradle`
-  * Inside `webpack.config.js`, the fields in : `module.exports.entry`, the one is `module.exports.output`, where you need to replace `demoWebpack` with your name
-  * Inside `metadata.xml`, using the thingworx logic
+  * Inside `webpack.config.js`,
+      * Replace `MY_WIDGET_RUNTIME` and `MY_WIDGET_IDE` with proper names
+      * The fields in `module.exports.entry`, replace `demoWebpack` with your widget name
+      * In `module.exports.output`, where you need to replace `demoWebpack` with your widget name name
+  * Inside `metadata.xml`, using the thingworx syntax, use replace `MY_WIDGET_RUNTIME` and `MY_WIDGET_IDE` with proper names, as above
   * If you plan to work 
 * Change the thingworx server used to publish the widget
   * Inside `build.gradle`, configure the thingworx settings under `project.ext`
