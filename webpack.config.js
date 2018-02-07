@@ -7,9 +7,9 @@ module.exports = {
         // the entry point when viewing the index.html page
         htmlDemo: "./src/index.ts",
         // the entry point for the runtime widget
-        windgetRuntime: './src/demoWebpack.runtime.ts',
+        MY_WIDGET_RUNTIME: './src/demoWebpack.runtime.ts',
         // the entry point for the ide widget
-        widgetIde: './src/demoWebpack.ide.ts'
+        MY_WIDGET_IDE: './src/demoWebpack.ide.ts'
     },
     output: {
         path: path.join(__dirname, "ui", "demoWebpack"),
@@ -20,7 +20,7 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
-            name: "windgetRuntime",
+            name: "MY_WIDGET_RUNTIME",
             async: true,
             children: true
         }),
