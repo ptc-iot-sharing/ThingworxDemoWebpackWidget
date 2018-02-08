@@ -9,6 +9,8 @@ var ZipPlugin = require('zip-webpack-plugin');
 let packageJson = require("./package.json");
 // look if we are in production or not based on the -p argument
 const isProduction = (process.argv.indexOf('-p') !== -1);
+// look if we are in initialization mode based on the --init argument
+const isInitialization = (process.argv.indexOf('--env.init') !== -1);
 module.exports = {
     entry: {
         // the entry point when viewing the index.html page
@@ -99,6 +101,22 @@ module.exports = {
         ]
     },
 };
+// if we are in the initialization phase, do the renames
+if(isInitialization) {
+    module.exports.plugins.unshift(new InitializeProject());
+}
+
+function InitializeProject(options) { }
+
+InitializeProject.prototype.apply = function (compiler) {
+    compiler.plugin('run', function () {
+        console.log(`Generating widget with name: ${packageJson.name}`);
+        let fs = require('fs');
+        // rename the ide.ts and runtime.ts files
+        fs.renameSync("src/demoWebpack.ide.ts", `src/${packageJson.name}.ide.ts`);
+        fs.renameSync("src/demoWebpack.runtime.ts", `src/${packageJson.name}.runtime.ts`);
+    });
+}
 
 function WidgetMetadataGenerator(options) { }
 
