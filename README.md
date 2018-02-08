@@ -27,19 +27,17 @@ The following software is required:
 * [NodeJS](https://nodejs.org/en/) needs to be installed and added to the `PATH`.
 
 The following software is recommended:
-* [Visual Studio Code](https://code.visualstudio.com/): An integrated developer enviroment with great typescript support. 
+* [Visual Studio Code](https://code.visualstudio.com/): An integrated developer enviroment with great typescript support. You can also use any IDE of your liking, it just that most of the testing was done using VSCode.
 
 ### Proposed folder structure
 
 ```
 demoWebpackTypescriptWidget
 │   README.md         // this file
-│   package.json      // here you can specify project dependencies (or add them via npm --save)
-│   settings.gradle   // specify the name of the build extension
-│   build.gradle      // handles creating the extension zip and uploading it to the server
+│   package.json      // here you can specify project name, homepage and dependencies. This is the only file should edit to start a new project
 │   tsconfig.json     // configuration for the typescript compiler
-│   webpack.config.js // configuration for webpack
-│   metadata.xml      // thingworx metadata file for this widget
+│   webpack.config.js // configuration for webpack 
+│   metadata.xml      // thingworx metadata file for this widget. This is automatically generated based on your package.json
 │   index.html        // when testing the widget outside of thingworx, the index file used.
 └───src               // main folder where your developement will take place
 │   │   index.ts               // source file used when testing the widget outside of twx
@@ -51,24 +49,20 @@ demoWebpackTypescriptWidget
 │   │   │   ...
 │   └───styles        // folder for css styles that you can import into your app using require statements
 │   └───images        // folder for resources that are copied over to the development extension. Think of folder of images that you referece only dynamicaly
-└───ui, build         // temporary folder used during compilation
+└───build         // temporary folder used during compilation
 └───zip               // location of the built extension
 ```
 
 ### Files to change
-The following changes need to be done when you start developing a widget:
-
-* Change the name of the widget
-  * Inside `package.json`, the `name` field
-  * Inside `settings.gradle`
-  * Inside `webpack.config.js`, the fields in : `module.exports.entry`, the one is `module.exports.output`, where you need to replace `demoWebpack` with your name
-  * Inside `metadata.xml`, using the thingworx logic
-  * If you plan to work 
-* Change the thingworx server used to publish the widget
-  * Inside `build.gradle`, configure the thingworx settings under `project.ext`
-* Rename the `demoWebpack.ide.ts` and `demoWebpack.runtime.ts` accordingly.
-
-After all the necessary changes are done, run `npm install`. 
+In order to start developing a new widget using this template you need to do the following:
+1. Clone this repository 
+```
+git clone http://roicentersvn.ptcnet.ptc.com/placatus/DemoWebpackWidget.git
+```
+2. Open `package.json` and configure the `name`, `description`, and other fields you find relevant
+3. Run `npm install`. This will install the development dependencies for this project.
+4. Run `npm run init`. This will create sample runtime and ide typescript files using the name.
+5. Start working on your widget.
 
 ### Adding dependencies
 
@@ -78,8 +72,7 @@ If you are using a javascript library that also has typescript mappings you can 
 ### Building and publishing
 
 The following commands allow you to build and compile your widget:
-* `npm run build`: builds the extension
+* `npm run build`: builds the extension. Creates a new extension zip file under the `zip` folder.
 * `npm run watch`: watches the source files, and whenever they change, do a build
-* `npm run packageExtension`: executed after a `npm run build`, or while `npm watch` is running, it creates a zip file inside the `zip` directory
-* `npm run upload`: same as `npm run packageExtension`, but also uploads the widget to the configured thingworx
+* `npm run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`.
 

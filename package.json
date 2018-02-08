@@ -1,7 +1,7 @@
 {
     "name": "demoWebpack",
     "version": "1.0.0",
-    "description": "",
+    "description": "Example of a widget built using typescript, babel and webpack",
     "thingworxServer": "http://localhost:8016/",
     "thingworxUser": "Administrator",
     "thingworxPassword": "trUf6yuz2?_Gub",
@@ -17,7 +17,8 @@
         "build": "webpack --progress -p",
         "watch": "webpack --progress --watch",
         "server": "webpack-dev-server --open",
-        "upload": "webpack --progress -p --env.upload"
+        "upload": "webpack --progress -p --env.upload",
+        "init": "webpack --env.init"
     },
     "license": "ISC",
     "devDependencies": {
