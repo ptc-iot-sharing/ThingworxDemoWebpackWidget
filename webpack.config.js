@@ -1,10 +1,13 @@
 var path = require("path");
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+// enable cleaning of the build and zip directories
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+// enable building of the widget
 var ZipPlugin = require('zip-webpack-plugin');
+// enable reading master data from the package.json file
 let packageJson = require("./package.json");
-// look if we are in production or not
+// look if we are in production or not based on the -p argument
 const isProduction = (process.argv.indexOf('-p') !== -1);
 module.exports = {
     entry: {
@@ -19,11 +22,13 @@ module.exports = {
         path: path.join(__dirname, 'build', "ui", packageJson.name),
         filename: "[name].bundle.js",
         chunkFilename: "[id].chunk.js",
-        // ths is the path when viewing the widget in thingworx
+        // this is the path when viewing the widget in thingworx
         publicPath: "../Common/extensions/" + packageJson.name + "_ExtensionPackage/ui/" + packageJson.name + "/",
     },
     plugins: [
+        // delete build and zip folders
         new CleanWebpackPlugin(['build', 'zip']),
+        // we are optimizing the chunks based on the widget runtime file
         new webpack.optimize.CommonsChunkPlugin({
             name: "widgetRuntime",
             async: true,
@@ -33,12 +38,14 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: 'src/static', to: 'static' }
         ]),
+        // generates the metadata xml file and adds it to the archive
         new WidgetMetadataGenerator(),
+        // create the extension zip
         new ZipPlugin({
-            path: '../../../zip',
-            pathPrefix: 'ui/' + packageJson.name + "/",
+            path: path.join(__dirname, 'zip'), // a top level directory called zip
+            pathPrefix: 'ui/' + packageJson.name + "/", // path to the extension source code
             filename: packageJson.name + '-' + (isProduction ? 'min' : 'dev') + '-' + packageJson.version + '.zip',
-            pathMapper: function (assetPath) {
+            pathMapper: function (assetPath) { // handles renaming of the budles
                 if (assetPath == 'widgetRuntime.bundle.js') {
                     return packageJson.name + ".runtime.bundle.js"
                 } else if (assetPath == 'widgetIde.bundle.js') {
@@ -47,7 +54,6 @@ module.exports = {
                     return assetPath;
                 }
             },
-            include: /.*/,
             exclude: [/htmlDemo/, isProduction ? /(.*)\.map$/ : /a^/],
         })
     ],
@@ -72,7 +78,7 @@ module.exports = {
                     }
                 }
             },
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+            // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
@@ -98,27 +104,35 @@ function WidgetMetadataGenerator(options) { }
 
 WidgetMetadataGenerator.prototype.apply = function (compiler) {
     compiler.plugin('emit', function (compilation, callback) {
-        // read the metadata xml file
-        var fs = require('fs'),
-            parseString = require('xml2js').parseString,
-            xml2js = require('xml2js')
+        let fs = require('fs');
+        // first, increment the version in package.json
+        let packageVersion = packageJson.version.split(".");
+        packageJson.version = packageVersion[0] + "." + packageVersion[1] + "." + (parseInt(packageVersion[2]) + 1);
+        console.log("Incremented package version to " + packageJson.version);
+        fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 4));
+        // read the metadata xml file using xml2js
+        let xml2js = require('xml2js');
         fs.readFile('metadata.xml', 'utf-8', function (err, data) {
             if (err) console.log("Error reading metadata file" + err);
             // transform the metadata to json
-            parseString(data, function (err, result) {
-                console.log(JSON.stringify(result.Entities));
-
+            xml2js.parseString(data, function (err, result) {
                 if (err) console.log("Error parsing metadata file" + err);
+                // set the name of the extension package
                 result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.name = packageJson.name + "_ExtensionPackage";
+                // set the version of the package
                 result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.packageVersion = packageJson.version;
+                // set the name of the widget itself
                 result.Entities.Widgets[0].Widget[0].$.name = packageJson.name;
+                // if there is no file resourse set, then we must add a node in the xml
                 if (!result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource) {
                     result.Entities.Widgets[0].Widget[0].UIResources[0] = {};
                     result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource = [];
                 }
+                // add the ide file 
                 result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource.push(
                     { "$": { "type": "JS", "file": packageJson.name + ".ide.bundle.js", "description": "", "isDevelopment": "true", "isRuntime": "false" } }
                 );
+                // add the runtime file 
                 result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource.push(
                     { "$": { "type": "JS", "file": packageJson.name + ".runtime.bundle.js", "description": "", "isDevelopment": "false", "isRuntime": "true" } }
                 );
