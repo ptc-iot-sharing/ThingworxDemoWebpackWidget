@@ -1,6 +1,6 @@
 {
-    "name": "demoWebpackTypescript",
-    "version": "1.0.10",
+    "name": "demoWebpack",
+    "version": "1.0.11",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -32,8 +32,8 @@
         "typescript": "^2.6.1",
         "url-loader": "^0.6.2",
         "webpack": "^3.10.0",
-        "webpack-auto-inject-version": "^1.0.0",
         "webpack-dev-server": "^2.9.3",
+        "xml2js": "^0.4.19",
         "zip-webpack-plugin": "^2.1.0"
     },
     "dependencies": {}
