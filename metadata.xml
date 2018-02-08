@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><Entities>
   <ExtensionPackages>
-    <ExtensionPackage name="demoWebpack_ExtensionPackage" description="A widget with typescript and webpack" vendor="ThingWorx Labs" packageVersion="[AIV]{version}[/AIV]" minimumThingWorxVersion="6.0.0"/>
+    <ExtensionPackage name="" description="" vendor="" packageVersion="" minimumThingWorxVersion=""/>
   </ExtensionPackages>
   <Widgets>
-    <Widget name="demoWebpack">
+    <Widget name="">
       <UIResources/>
     </Widget>
   </Widgets>

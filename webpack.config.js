@@ -140,6 +140,12 @@ WidgetMetadataGenerator.prototype.apply = function (compiler) {
                 if (err) console.log("Error parsing metadata file" + err);
                 // set the name of the extension package
                 result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.name = packageJson.name + "_ExtensionPackage";
+                // set the description from the package.json
+                result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.description = packageJson.description;
+                // set the vendor using the author field in package json
+                result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.vendor = packageJson.author;
+                // set the minimum thingworx version
+                result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.minimumThingWorxVersion = packageJson.minimumThingWorxVersion; 
                 // set the version of the package
                 result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.packageVersion = packageJson.version;
                 // set the name of the widget itself
