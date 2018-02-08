@@ -1,4 +1,5 @@
 var path = require("path");
+var fs = require("fs");
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 // enable cleaning of the build and zip directories
@@ -11,6 +12,14 @@ let packageJson = require("./package.json");
 const isProduction = (process.argv.indexOf('-p') !== -1);
 // look if we are in initialization mode based on the --init argument
 const isInitialization = (process.argv.indexOf('--env.init') !== -1);
+// look if we are in initialization mode based on the --init argument
+const uploadEnabled = (process.argv.indexOf('--env.upload') !== -1);
+
+// first, increment the version in package.json
+let packageVersion = packageJson.version.split(".");
+packageJson.version = packageVersion[0] + "." + packageVersion[1] + "." + (parseInt(packageVersion[2]) + 1);
+console.log("Incremented package version to " + packageJson.version);
+fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 4));
 module.exports = {
     entry: {
         // the entry point when viewing the index.html page
@@ -101,8 +110,9 @@ module.exports = {
         ]
     },
 };
+
 // if we are in the initialization phase, do the renames
-if(isInitialization) {
+if (isInitialization) {
     module.exports.plugins.unshift(new InitializeProject());
 }
 
@@ -111,7 +121,6 @@ function InitializeProject(options) { }
 InitializeProject.prototype.apply = function (compiler) {
     compiler.plugin('run', function () {
         console.log(`Generating widget with name: ${packageJson.name}`);
-        let fs = require('fs');
         // rename the ide.ts and runtime.ts files
         fs.renameSync("src/demoWebpack.ide.ts", `src/${packageJson.name}.ide.ts`);
         fs.renameSync("src/demoWebpack.runtime.ts", `src/${packageJson.name}.runtime.ts`);
@@ -122,12 +131,6 @@ function WidgetMetadataGenerator(options) { }
 
 WidgetMetadataGenerator.prototype.apply = function (compiler) {
     compiler.plugin('emit', function (compilation, callback) {
-        let fs = require('fs');
-        // first, increment the version in package.json
-        let packageVersion = packageJson.version.split(".");
-        packageJson.version = packageVersion[0] + "." + packageVersion[1] + "." + (parseInt(packageVersion[2]) + 1);
-        console.log("Incremented package version to " + packageJson.version);
-        fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 4));
         // read the metadata xml file using xml2js
         let xml2js = require('xml2js');
         fs.readFile('metadata.xml', 'utf-8', function (err, data) {
@@ -173,3 +176,39 @@ WidgetMetadataGenerator.prototype.apply = function (compiler) {
         });
     });
 };
+
+// if we are in the initialization phase, do the renames
+if (uploadEnabled) {
+    module.exports.plugins.push(new UploadToThingworxPlugin({
+        thingworxServer: packageJson.thingworxServer,
+        thingworxUser: packageJson.thingworxUser,
+        thingworxPassword: packageJson.thingworxPassword
+    }));
+}
+
+function UploadToThingworxPlugin(options) {
+    this.options = options;
+}
+
+UploadToThingworxPlugin.prototype.apply = function (compiler) {
+    let options = this.options;
+    compiler.plugin('done', function () {
+        console.log("Starting widget upload");
+        let request = require('request');
+        let formData = {
+            file: fs.createReadStream(__dirname + '/zip/' + packageJson.name + '-' + (isProduction ? 'min' : 'dev') + '-' + packageJson.version + '.zip')
+        }
+        request.post({
+            url: `${options.thingworxServer}/Thingworx/ExtensionPackageUploader?purpose=import`,
+            headers: {
+                "X-XSRF-TOKEN": "TWX-XSRF-TOKEN-VALUE"
+            },
+            formData: formData
+        }, function (err, httpResponse, body) {
+            if (err) {
+                return console.error('upload failed:', err);
+            }
+            console.log('Upload successful!');
+        }).auth(options.thingworxUser, options.thingworxPassword);
+    });
+}

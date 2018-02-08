@@ -1,8 +1,11 @@
 {
     "name": "demoWebpack",
-    "version": "1.0.13",
+    "version": "1.0.27",
     "description": "",
     "main": "index.js",
+    "thingworxServer": "http://localhost:8016/",
+    "thingworxUser": "Administrator",
+    "thingworxPassword": "trUf6yuz2?_Gub",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --progress -p",
@@ -26,6 +29,7 @@
         "css-loader": "^0.28.7",
         "extract-text-webpack-plugin": "^3.0.2",
         "file-loader": "^1.1.5",
+        "request": "^2.83.0",
         "source-map-loader": "^0.2.3",
         "style-loader": "^0.19.0",
         "ts-loader": "^3.1.1",
