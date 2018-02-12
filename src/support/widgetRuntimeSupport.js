@@ -1,7 +1,85 @@
+/**
+ * Returns a decorator that binds the class member it is applied to to the given widget property.
+ * When this decorator is used, `updateProperty` becomes optional.
+ * 
+ * The class member to which this descriptor should not have a getter. If it does, it will be replaced
+ * by this decorator.
+ */
+export function TWProperty(name) {
+    return function (target, key, descriptor) {
+        var setter;
+        // Override the setter to call setProperty. It should also invoke the member's setter if it has one
+        if (descriptor.set) {
+            var previousSetter = descriptor.set;
+            setter = function (value) {
+                this.setProperty(name, value);
+                previousSetter.apply(this, arguments);
+            };
+        }
+        else {
+            setter = function (value) {
+                this.setProperty(name, value);
+            }
+        }
+
+        // Override the getter to return the result of calling getProperty
+        descriptor.get = function () {
+            return this.getProperty(name);
+        }
+
+        // Decorate updateProperty if a previous annotation hasn't already done it
+        if (!target._decoratedProperties) {
+            target._decoratedProperties = {};
+            var standardUpdateProperties = target.updateProperty;
+
+            if (standardUpdateProperties) {
+                target.updateProperty = function (info) {
+                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue;
+                    standardUpdateProperties.apply(this, arguments);
+                };
+            }
+            else {
+                target.updateProperty = function (info) {
+                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue;
+                };
+            }
+        }
+
+        // Add this automatic property to the internal binding map
+        target._decoratedProperties[name] = key;
+    }
+}
+
 
 /**
- * This file contains runtime support information for creating widgets by extending TW.Widget
+ * Returns a decorator that binds the class method it is applied to to the given widget service.
+ * When this decorator is used, `serviceInvoked` becomes optional.
  */
+export function TWService(name) {
+    return function (target, key, descriptor) {
+        // Decorate updateProperty if a previous annotation hasn't already done it
+        if (!target._decoratedServices) {
+            target._decoratedServices = {};
+            var standardServiceInvoked = target.serviceInvoked;
+
+            if (standardServiceInvoked) {
+                target.serviceInvoked = function (name) {
+                    if (this._decoratedServices[name]) this[this._decoratedServices[name]]();
+                    standardServiceInvoked.apply(this, arguments);
+                };
+            }
+            else {
+                target.serviceInvoked = function (name) {
+                    if (this._decoratedServices[name]) this[this._decoratedServices[name]]();
+                };
+            }
+        }
+
+        // Add this automatic property to the internal binding map
+        target._decoratedServices[name] = key;
+    }
+}
+
 if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
     (function () {
         let TWWidgetConstructor = TW.IDE.Widget;

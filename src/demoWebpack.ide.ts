@@ -43,7 +43,9 @@ class DemoWebpackWidget extends TWComposerWidget {
 
     widgetServices(): Dictionary<TWWidgetService> {
         return {
-
+            "TestService": {
+                
+            }
         };
     };
 
