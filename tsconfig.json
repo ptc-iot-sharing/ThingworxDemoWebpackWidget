@@ -5,6 +5,7 @@
         "noImplicitAny": false,
         "module": "esnext",
         "target": "es5",
+        "experimentalDecorators": true,
         "lib": [
             "es2015",
             "dom"

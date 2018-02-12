@@ -1,34 +1,33 @@
-declare const TW: any;
 // automatically import the css file
-require("./styles/ide.css");
+import { ThingworxComposerWidget } from './support/widgetRuntimeSupport'
 
-TW.IDE.Widgets.demoWebpack = function() {
+@ThingworxComposerWidget
+class DemoWebpackWidget extends TWComposerWidget {
 
-    this.widgetIconUrl = function() {
+    widgetIconUrl(): string {
         return require('./images/icon.png');
-    };
-    this.widgetProperties = function() {
+    }
+
+    widgetProperties(): TWWidgetProperties {
+        require("./styles/ide.css");
         return {
             'name': 'TypescriptWebpackWidget',
             'description': 'An example widget showing how you can use modern web developent tech',
             'category': ['Common'],
-            'iconImage': 'icon.png',
-            'isExtension': true,
             'supportsAutoResize': true,
-            'isResizable': true,
             'properties': {
                 'Width': {
                     'description': 'Total width of the widget',
                     'baseType': 'NUMBER',
                     'isVisible': true,
-                    'defaultValue': 640,
+                    'defaultValue': 90,
                     'isBindingTarget': false
                 },
                 'Height': {
                     'description': 'Total height of the widget',
                     'baseType': 'NUMBER',
                     'isVisible': true,
-                    'defaultValue': 800,
+                    'defaultValue': 30,
                     'isBindingTarget': false
                 },
                 'Value': {
@@ -42,7 +41,13 @@ TW.IDE.Widgets.demoWebpack = function() {
         };
     };
 
-    this.widgetEvents = function () {
+    widgetServices(): Dictionary<TWWidgetService> {
+        return {
+
+        };
+    };
+
+    widgetEvents(): Dictionary<TWWidgetEvent> {
         return {
             'CellLabelChanged': {
                 'warnIfNotBound': false
@@ -51,10 +56,16 @@ TW.IDE.Widgets.demoWebpack = function() {
                 'warnIfNotBound': false
             }
         };
+    }
+
+    renderHtml(): string {
+        return '<div class="widget-content widget-demo-viewer">test</div>';
     };
 
-    this.renderHtml = function() {
-        return '<div class="widget-content widget-mxdiagram-viewer"></div>';
-    };
+    afterRender(): void {
+    }
+
+    beforeDestroy(): void {
+    }
 
 }

@@ -1,33 +1,33 @@
-TW.Runtime.Widgets.demoWebpack = function () {
-    let internalLogic;
+import { ThingworxRuntimeWidget } from './support/widgetRuntimeSupport'
 
-    this.renderHtml = function () {
+@ThingworxRuntimeWidget
+class DemoWebpackWidget extends TWRuntimeWidget {
+    serviceInvoked(name: string): void {
+        throw new Error("Method not implemented.");
+    }
+    internalLogic;
+
+    renderHtml(): string {
         return '<div class="widget-content widget-demo"></div>';
     };
 
-    this.runtimeProperties = function () {
-        return {
-            needsDataLoadingAndError: true,
-        };
+    async afterRender(): Promise<void> {
+        this.internalLogic = await import("./internalLogic/internalLogic");
     }
 
-    this.afterRender = async function () {
-        internalLogic = await import("./internalLogic/internalLogic");
-    }
-
-    this.updateProperty = async function (updatePropertyInfo) {
-        this.setProperty(updatePropertyInfo.TargetProperty, updatePropertyInfo.RawDataFromInvoke);
-        switch (updatePropertyInfo.TargetProperty) {
+    async updateProperty(info: TWUpdatePropertyInfo): Promise<void> {
+        this.setProperty(info.TargetProperty, info.RawDataFromInvoke);
+        switch (info.TargetProperty) {
             case 'Value':
-                if (!internalLogic) {
-                    internalLogic = await import("./internalLogic/internalLogic");
+                if (!this.internalLogic) {
+                    this.internalLogic = await import("./internalLogic/internalLogic");
                 }
-                internalLogic.createDataElement(this.jqElement[0], updatePropertyInfo.SinglePropertyValue)
+                this.internalLogic.createDataElement(this.jqElement[0], info.SinglePropertyValue)
                 break;
         }
     }
 
-    this.beforeDestroy = function () {
-        this.resetCurrentGraph();
+    beforeDestroy?(): void {
+        // resetting current widget
     }
 }

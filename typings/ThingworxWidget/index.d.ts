@@ -72,7 +72,13 @@ declare interface TWUpdatePropertyInfo {
     /**
      * The name of the updated property.
      */
-    TargetPropertyName: string;
+    TargetProperty: string;
+
+
+    /** 
+     *  The name of the property that caused this data change
+    */
+    SourceProperty: string;
 
     /**
      * The updated property value.
@@ -88,8 +94,33 @@ declare interface TWUpdatePropertyInfo {
      * If the updated property is an infotable, this field
      * contains the rows of objects contained within the infotable.
      */
-    ActualDataRows: [any]?;
+    ActualDataRows: any[]?;
 
+    /** 
+     * The raw data from the invoke of the service
+     */
+    RawDataFromInvoke: any;
+
+    /**
+     * The datashape of the updated property
+     */
+    DataShape: TWDataShape?
+
+    /** 
+     * Can be 'AllData' or 'SelectedRows' depending or where the binding is coming from. 
+     * If the data is comming from a widget, then this in an empty string or undefined
+     */
+    SourceDetails: any?
+
+    /**
+     * Array of the currently selected row indices
+     */
+    SelectedRowIndices: number[]?;
+
+    /**
+     * Specifies if the binding is done on the selected rows of a service
+     */
+    isBoundToSelectedRows: boolean
 }
 
 /**
@@ -138,7 +169,7 @@ declare interface TWWidgetEvent {
 
     /**
      * Defaults to `false`. If set to `true`, Thingworx will generate a to-do item if this event
-     * is not bound as a source.
+     * is not bound
      */
     warnIfNotBound?: boolean?;
 
@@ -147,12 +178,12 @@ declare interface TWWidgetEvent {
 /**
  * A union of string defining the available Thingworx base types.
  */
-type TWBaseType = 'STRING' | 'LOCATION' | 'NUMBER' | 'INTEGER' | 'LONG' | 'BOOLEAN' | 
-                    'DASHBOADNAME' | 'GROUPNAME' | 'GUID' | 'HTML' | 'HYPERLINK' | 'IMAGELINK' | 
-                    'MASHUPNAME' | 'MENUNAME' | 'PASSWORD' | 'TEXT' | 'THINGCODE' | 'THINGNAME' | 
-                    'USERNAME' | 'DATETIME' | 'XML' | 'JSON' | 'QUERY' | 'TAGS' | 
-                    'SCHEDULE' | 'ANYSCALAR' | 'BLOB' | 'THINGSHAPENAME' | 'THINGTEMPLATENAME' | 'DATASHAPENAME' | 
-                    'PROJECTNAME' | 'BASETYPENAME' | 'STATEDEFINITION' | 'STYLEDEFINITION' | 'FIELDNAME';
+type TWBaseType = 'STRING' | 'LOCATION' | 'NUMBER' | 'INTEGER' | 'LONG' | 'BOOLEAN' |
+    'DASHBOADNAME' | 'GROUPNAME' | 'GUID' | 'HTML' | 'HYPERLINK' | 'IMAGELINK' |
+    'MASHUPNAME' | 'MENUNAME' | 'PASSWORD' | 'TEXT' | 'THINGCODE' | 'THINGNAME' |
+    'USERNAME' | 'DATETIME' | 'XML' | 'JSON' | 'QUERY' | 'TAGS' |
+    'SCHEDULE' | 'ANYSCALAR' | 'BLOB' | 'THINGSHAPENAME' | 'THINGTEMPLATENAME' | 'DATASHAPENAME' |
+    'PROJECTNAME' | 'BASETYPENAME' | 'STATEDEFINITION' | 'STYLEDEFINITION' | 'FIELDNAME';
 
 /**
  * The prototype for an object representing a single widget property.
@@ -321,7 +352,7 @@ declare interface TWWidgetProperties {
      * The declarative spots are HTML elements with the `sub-widget-container-id` attribute set to this widget's ID and the `sub-widget` attribute set to
      * the index of the sub-widget that will be rendered within that element.
      */
-    isContainerWithDeclarativeSpotsForSubWidgets? :boolean;
+    isContainerWithDeclarativeSpotsForSubWidgets?: boolean;
 
     /**
      * Defaults to true. When set to false, the widget will not get the usual service loading indicator, regardless
@@ -530,7 +561,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @return          The corresponding infotable. This may either be the name of an existing data shape
      *                  defined in the platform, or an object describing the data shape.
      */
-    getSourceDatashapeName?(name: string): string? | TWDataShape?;
+    getSourceDatashapeName?(name: string): string?| TWDataShape?;
 
     /**
      * This method is invoked by the platform to retrieve the data shape corresponding to
@@ -542,7 +573,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @return          The corresponding infotable. This may either be the name of an existing data shape
      *                  defined in the platform, or an object describing the data shape.
      */
-    getSourceDatashape?(name: string): string? | TWDataShape?;
+    getSourceDatashape?(name: string): string?| TWDataShape?;
 
     /**
      * Shows this widget's bounding box, if it was hidden.
@@ -648,7 +679,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * Subclasses are expected to not override this method.
      * @param updateUi      Defaults to false. Should be set to true to update the properties panel for this widget when it is selected.
      */
-    updateProperties({updateUi}?: {updateUi?: boolean}): void;
+    updateProperties({ updateUi }?: { updateUi?: boolean }): void;
 
     /**
      * Returns the JSON representation of this widget.
@@ -856,7 +887,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @param IDs       An object that will hold the IDs of this widget and its child widgets when this method returns.
      *                  The IDs will represent this object's keys and their values will be set to `1`.
      */
-    getWidgetIds(IDs: {[key: string]: number}): void;
+    getWidgetIds(IDs: { [key: string]: number }): void;
 
 }
 
@@ -1086,10 +1117,10 @@ declare abstract class TWRuntimeWidget extends TWWidget {
      * @param dialogClass           Defaults to `"undefined"`. A string containing custom classes to add to the popup.
      */
     showPopup(
-        mashupName: string, 
-        parameters: Dictionary<any>, 
-        callback?: (() => void)?, 
-        paramChangeCallback?: ((name: string, value: any) => void)?, 
+        mashupName: string,
+        parameters: Dictionary<any>,
+        callback?: (() => void)?,
+        paramChangeCallback?: ((name: string, value: any) => void)?,
         modal?: boolean?,
         popupTitle?: string?,
         fixedPopupWidth?: number?,
@@ -1157,14 +1188,14 @@ declare abstract class TWRuntimeWidget extends TWWidget {
 
 declare namespace TW {
 
-    abstract class Widget extends TWRuntimeWidget {}
+    abstract class Widget extends TWRuntimeWidget { }
 
     namespace Runtime {
         const Widgets: Dictionary<typeof TW.Widget>;
     }
 
     namespace IDE {
-        abstract class Widget extends TWComposerWidget {}
+        abstract class Widget extends TWComposerWidget { }
         const Widgets: Dictionary<typeof TW.IDE.Widget>;
     }
 }
