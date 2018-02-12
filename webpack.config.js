@@ -235,9 +235,14 @@ UploadToThingworxPlugin.prototype.apply = function (compiler) {
                 },
                 function (err, httpResponse, body) {
                     if (err) {
-                        return console.error('upload failed:', err);
+                        console.error("Failed to upload widget to thingworx");
+                        throw err;
                     }
-                    console.log('Upload successful!');
+                    if (httpResponse.statusCode != 200) {
+                        throw `Failed to upload widget to thingworx. We got status code ${httpResponse.statusCode} (${httpResponse.statusMessage})`;
+                    } else {
+                        console.log(`Uploaded widget version ${packageJson.version} to Thingworx!`); 
+                    }
                 }
             )
             .auth(options.thingworxUser, options.thingworxPassword);
