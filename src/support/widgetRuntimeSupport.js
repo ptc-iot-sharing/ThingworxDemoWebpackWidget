@@ -21,6 +21,8 @@ export function TWProperty(name) {
                 this.setProperty(name, value);
             }
         }
+        // set the newly created setter
+        descriptor.set = setter;
 
         // Override the getter to return the result of calling getProperty
         descriptor.get = function () {
