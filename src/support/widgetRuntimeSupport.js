@@ -8,6 +8,9 @@
 export function TWProperty(name) {
     return function (target, key, descriptor) {
         var setter;
+        var hasDescriptor = (descriptor !== undefined);
+        if (!hasDescriptor) descriptor = {};
+
         // Override the setter to call setProperty. It should also invoke the member's setter if it has one
         if (descriptor.set) {
             var previousSetter = descriptor.set;
@@ -49,6 +52,8 @@ export function TWProperty(name) {
 
         // Add this automatic property to the internal binding map
         target._decoratedProperties[name] = key;
+
+        if (!hasDescriptor) Object.defineProperty(target, key, descriptor);
     }
 }
 
@@ -222,7 +227,7 @@ export function ThingworxRuntimeWidget(widget) {
     // Thingworx attempts to change the prototype of the custom widget constructor
     // which in addition to being a bad practice, prevents the usual prototype-based inheritance
     // and prevents using the class-based syntax
-    Object.defineProperty(widget, 'prototype', {writable: false});
+    Object.defineProperty(widget, 'prototype', { writable: false });
 
     TW.Runtime.Widgets[widget.name] = widget;
 }
@@ -232,7 +237,7 @@ export function ThingworxRuntimeWidget(widget) {
  * @param widget        The widget class to export.
  */
 export function ThingworxComposerWidget(widget) {
-    Object.defineProperty(widget, 'prototype', {writable: false});
+    Object.defineProperty(widget, 'prototype', { writable: false });
 
     TW.IDE.Widgets[widget.name] = widget;
 }
