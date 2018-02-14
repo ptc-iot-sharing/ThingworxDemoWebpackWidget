@@ -39,13 +39,13 @@ export function TWProperty(name) {
 
             if (standardUpdateProperties) {
                 target.updateProperty = function (info) {
-                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue;
+                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue || info.RawSinglePropertyValue;
                     standardUpdateProperties.apply(this, arguments);
                 };
             }
             else {
                 target.updateProperty = function (info) {
-                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue;
+                    if (this._decoratedProperties[info.TargetProperty]) this[this._decoratedProperties[info.TargetProperty]] = info.SinglePropertyValue || info.RawSinglePropertyValue;
                 };
             }
         }
