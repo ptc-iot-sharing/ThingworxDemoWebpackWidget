@@ -90,6 +90,7 @@ export function TWService(name) {
 if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
     (function () {
         let TWWidgetConstructor = TW.IDE.Widget;
+        if (window.TWComposerWidget) return;
         let __BMTWInternalState;
         let __BMTWArguments;
         TW.IDE.Widget = function () {
@@ -169,6 +170,7 @@ if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
 if (typeof TW.Widget == 'function') {
     (function () {
         let TWWidgetConstructor = TW.Widget;
+        if (window.TWRuntimeWidget) return;
         let __BMTWInternalState;
         TW.Widget = function () {
             TWWidgetConstructor.apply(this, arguments);
