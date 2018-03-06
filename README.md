@@ -10,7 +10,7 @@ There are many advantages to this, and here's some of them:
 
 * Because of *dynamic imports and require calls*, webpack can load javascript files and other resources only they are needed. So, if you are using a very big external library, this library is only loaded if the widget is used in a masup, rather than being always loaded in the `CombinedExtensions.js` files.
 * *Better resource management*: You can load a resource (like images, xml files, css) only if it's used in the widget, and you'll no longer have to care about where to put it and how to package it. Also, the webpack loader will inline small files for better network performance.
-* *Automatic dependency management*: Webpack can be very easily integrated with the `npm` repositories, so this brings automatic dependency management. You'll no longer have to manually download libraries from the web, struggle to add all the dependencies and so on. Instead, `npm`, which functions similarly to maven central handles all of this.
+* *Automatic dependency management*: Webpack can be very easily integrated with the `npm` repositories, so this brings automatic dependency management. You'll no longer have to manually download libraries from the web, struggle to add all the dependencies and so on. Instead, `npm`, which functions similarly to maven central, handles all of this.
 * *Easily develop and test the widget outside of thingworx*: By doing the initial developent and testing in a simple html page, it reduces the waiting times of publishing widget, doing reloads, etc...
 * *Allows using of different loaders*: You can develop your code in multiple languages, and use transpilers to convert you code javascript code that works in older javascript version. One of this languages, is typescript.
 
@@ -25,11 +25,11 @@ There are many advantages to this, and here's some of them:
 
 ## Using the widget template
 
-### Necessary software
+### Required software
 
 The following software is required:
 
-* [NodeJS](https://nodejs.org/en/) needs to be installed and added to the `PATH`.
+* [NodeJS](https://nodejs.org/en/) needs to be installed and added to the `PATH`. You should use the LTS version.
 
 The following software is recommended:
 
@@ -40,7 +40,7 @@ The following software is recommended:
 ```
 demoWebpackTypescriptWidget
 │   README.md         // this file
-│   package.json      // here you can specify project name, homepage and dependencies. This is the only file should edit to start a new project
+│   package.json      // here you specify project name, homepage and dependencies. This is the only file you should edit to start a new project
 │   tsconfig.json     // configuration for the typescript compiler
 │   webpack.config.js // configuration for webpack
 │   metadata.xml      // thingworx metadata file for this widget. This is automatically generated based on your package.json
@@ -54,7 +54,8 @@ demoWebpackTypescriptWidget
 │   │   │   file2.js           // javascript file in ES2015 with module
 │   │   │   ...
 │   └───styles        // folder for css styles that you can import into your app using require statements
-│   └───images        // folder for resources that are copied over to the development extension. Think of folder of images that you referece only dynamicaly
+│   └───images        // folder for image resources you are statically including using require statements
+│   └───static        // folder for resources that are copied over to the development extension. Think of folder of images that you referece only dynamicaly
 └───build         // temporary folder used during compilation
 └───zip               // location of the built extension
 ```
@@ -81,6 +82,6 @@ If you are using a javascript library that also has typescript mappings you can 
 
 The following commands allow you to build and compile your widget:
 
-* `npm run build`: builds the extension. Creates a new extension zip file under the `zip` folder.
-* `npm run watch`: watches the source files, and whenever they change, do a build
-* `npm run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`.
+* `npm run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production enviroments.
+* `npm run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for developement, with source-maps enabled.
+* `npm run watch`: watches the source files, and whenever they change, do a build.
