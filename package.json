@@ -5,7 +5,7 @@
     "thingworxServer": "http://localhost:8016/",
     "thingworxUser": "Administrator",
     "thingworxPassword": "trUf6yuz2?_Gub",
-    "author": "Thingworx Labs",
+    "author": "Thingworx RoIcenter",
     "minimumThingWorxVersion": "6.0.0",
     "homepage": "http://roicentersvn/placatus/DemoWebpackWidget",
     "repository": {
