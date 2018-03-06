@@ -65,8 +65,9 @@ module.exports = function (env, argv) {
                 exclude: [/htmlDemo/, isProduction ? /(.*)\.map$/ : /a^/]
             })
         ],
-
-        devtool: isProduction ? undefined : "eval-source-map",
+        // if we are in development mode, then use "eval-source-map".
+        // See https://webpack.js.org/configuration/devtool/ for all available options
+        devtool: isProduction ? undefined : 'eval-source-map',
         resolve: {
             // Add '.ts' and '.tsx' as resolvable extensions.
             extensions: ['.ts', '.tsx', '.js', '.json']
