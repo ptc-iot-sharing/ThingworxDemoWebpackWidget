@@ -8,6 +8,9 @@
     "author": "Thingworx RoIcenter",
     "minimumThingWorxVersion": "6.0.0",
     "homepage": "http://roicentersvn/placatus/DemoWebpackWidget",
+    "autoUpdate": {
+        "giteaURL": "http://roicentersvn/api/v1/repos/placatus/DemoWebpackWidget/releases/latest"
+    },
     "repository": {
         "type": "git",
         "url": "http://roicentersvn.ptcnet.ptc.com/placatus/DemoWebpackWidget.git"
