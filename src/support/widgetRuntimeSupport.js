@@ -2,7 +2,7 @@
  * Returns a decorator that binds the class member it is applied to to the given widget property.
  * When this decorator is used, `updateProperty` becomes optional.
  * 
- * The class member to which this descriptor should not have a getter. If it does, it will be replaced
+ * The class member to which this descriptor is applied should not have a getter. If it does, it will be replaced
  * by this decorator.
  */
 export function TWProperty(name) {
@@ -143,17 +143,36 @@ if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
                         delete this[key];
                     }
                     else {
-                        // Otherwise restore the previous value
-                        this[key] = values[key];
+                        // Otherwise restore the previous value, making it non-configurable
+                        Object.defineProperty(this, key, {
+                            value: values[key],
+                            configurable: NO,
+                            writable: YES
+                        });
+                        //this[key] = values[key];
                     }
                 }
                 else {
-                    // Restore previous values if they were defined
+                    // Restore previous values if they were defined, making them unconfigurable
+                    // A special exception has to be made for the 'properties' property which thingworx continues to use
+                    // after the widget is removed and all its non-prototype properties have been removed
+                    // That property is made non-writable in addition to being non-configurable
+                    let writable = (key !== 'properties');
                     if (keys.indexOf(key) != -1) {
-                        this[key] = values[key];
+                        Object.defineProperty(this, key, {
+                            value: values[key],
+                            configurable: NO,
+                            writable: writable
+                        });
+                        //this[key] = values[key];
                     }
                     else {
-                        this[key] = state[key];
+                        Object.defineProperty(this, key, {
+                            value: state[key],
+                            configurable: NO,
+                            writable: writable
+                        });
+                        //this[key] = state[key];
                     }
                 }
             });
