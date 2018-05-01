@@ -146,8 +146,8 @@ if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
                         // Otherwise restore the previous value, making it non-configurable
                         Object.defineProperty(this, key, {
                             value: values[key],
-                            configurable: NO,
-                            writable: YES
+                            configurable: false,
+                            writable: true
                         });
                         //this[key] = values[key];
                     }
@@ -161,7 +161,7 @@ if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
                     if (keys.indexOf(key) != -1) {
                         Object.defineProperty(this, key, {
                             value: values[key],
-                            configurable: NO,
+                            configurable: false,
                             writable: writable
                         });
                         //this[key] = values[key];
@@ -169,7 +169,7 @@ if (TW.IDE && (typeof TW.IDE.Widget == 'function')) {
                     else {
                         Object.defineProperty(this, key, {
                             value: state[key],
-                            configurable: NO,
+                            configurable: false,
                             writable: writable
                         });
                         //this[key] = state[key];
