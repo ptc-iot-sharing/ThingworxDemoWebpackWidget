@@ -10,6 +10,7 @@ var CleanWebpackPlugin = require('clean-webpack-plugin');
 var ZipPlugin = require('zip-webpack-plugin');
 // enable reading master data from the package.json file
 let packageJson = require('./package.json');
+var DeclarationBundlerPlugin = require('dtsbundler-webpack-plugin');
 // look if we are in initialization mode based on the --init argument
 const isInitialization = process.argv.indexOf('--env.init') !== -1;
 // look if we are in initialization mode based on the --init argument
@@ -47,6 +48,10 @@ module.exports = function (env, argv) {
             new CopyWebpackPlugin([{ from: 'src/static', to: 'static' }]),
             // generates the metadata xml file and adds it to the archive
             new WidgetMetadataGenerator(),
+            new DeclarationBundlerPlugin({
+                moduleName:`${packageJson.name}`,
+                out: path.join(`${packageJson.name}.d.ts`),
+            }),
             // create the extension zip
             new ZipPlugin({
                 path: path.join(__dirname, 'zip'), // a top level directory called zip
@@ -90,12 +95,6 @@ module.exports = function (env, argv) {
                     test: /\.tsx?$/,
                     use: 'ts-loader',
                     exclude: /node_modules/
-                },
-                // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-                {
-                    enforce: 'pre',
-                    test: /\.js$/,
-                    loader: 'source-map-loader'
                 },
                 {
                     test: /\.(png|jp(e*)g|svg|xml)$/,
@@ -165,7 +164,7 @@ module.exports = function (env, argv) {
                     result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.packageVersion = packageJson.version;
                     // set the name of the widget itself
                     result.Entities.Widgets[0].Widget[0].$.name = packageJson.name;
-                    if(packageJson.autoUpdate) {
+                    if (packageJson.autoUpdate) {
                         result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.buildNumber = JSON.stringify(packageJson.autoUpdate);
                     }
                     // if there is no file resourse set, then we must add a node in the xml
