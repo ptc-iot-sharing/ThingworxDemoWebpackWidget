@@ -94,7 +94,7 @@ declare interface TWUpdatePropertyInfo {
      * If the updated property is an infotable, this field
      * contains the rows of objects contained within the infotable.
      */
-    ActualDataRows: any[]?;
+    ActualDataRows?: any[];
 
     /** 
      * The raw data from the invoke of the service
@@ -104,18 +104,18 @@ declare interface TWUpdatePropertyInfo {
     /**
      * The datashape of the updated property
      */
-    DataShape: TWDataShape?
+    DataShape?: TWDataShape
 
     /** 
      * Can be 'AllData' or 'SelectedRows' depending or where the binding is coming from. 
      * If the data is comming from a widget, then this in an empty string or undefined
      */
-    SourceDetails: any?
+    SourceDetails?: any
 
     /**
      * Array of the currently selected row indices
      */
-    SelectedRowIndices: number[]?;
+    SelectedRowIndices?: number[];
 
     /**
      * Specifies if the binding is done on the selected rows of a service
@@ -147,13 +147,13 @@ declare interface TWWidgetService {
     /**
      * An optional description describing this service.
      */
-    description?: string?;
+    description?: string;
 
     /**
      * Defaults to `false`. If set to `true`, Thingworx will generate a to-do item if this service
      * is not bound as a target.
      */
-    warnIfNotBoundAsTarget?: boolean?;
+    warnIfNotBoundAsTarget?: boolean;
 
 }
 
@@ -165,13 +165,13 @@ declare interface TWWidgetEvent {
     /**
      * An optional description describing this event.
      */
-    description?: string?;
+    description?: string;
 
     /**
      * Defaults to `false`. If set to `true`, Thingworx will generate a to-do item if this event
      * is not bound
      */
-    warnIfNotBound?: boolean?;
+    warnIfNotBound?: boolean;
 
 }
 
@@ -423,7 +423,7 @@ declare interface TWWidgetProperties {
      */
     properties: Dictionary<TWWidgetProperty>;
 
-};
+}
 
 /**
  * A class that represents the base controller that manages the lifecycle and content of a Thingworx widget.
@@ -561,7 +561,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @return          The corresponding infotable. This may either be the name of an existing data shape
      *                  defined in the platform, or an object describing the data shape.
      */
-    getSourceDatashapeName?(name: string): string?| TWDataShape?;
+    getSourceDatashapeName?(name: string): string | TWDataShape;
 
     /**
      * This method is invoked by the platform to retrieve the data shape corresponding to
@@ -573,7 +573,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @return          The corresponding infotable. This may either be the name of an existing data shape
      *                  defined in the platform, or an object describing the data shape.
      */
-    getSourceDatashape?(name: string): string?| TWDataShape?;
+    getSourceDatashape?(name: string): string | TWDataShape | Dictionary<TWFieldDefinition>;
 
     /**
      * Shows this widget's bounding box, if it was hidden.
@@ -636,7 +636,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @param value                 The property's new value.
      * @return              `true` if this property change should cause a redraw, false or undefined otherwise.
      */
-    afterSetProperty?(name: string, value: any): boolean?;
+    afterSetProperty?(name: string, value: any): boolean;
 
     /**
      * Initializes this widget and adds its content to the page.
@@ -816,7 +816,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @param name      The name of the property.
      * @return          The property definition if available.
      */
-    getWidgetMetadata(name: string): TWWidgetProperty?;
+    getWidgetMetadata(name: string): TWWidgetProperty;
 
     /**
      * Returns the property attribute value for the given property, or the default value if the property definition does not provide it.
@@ -824,7 +824,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @param attribute     The name of the attribute.
      * @return              The property definition if available.
      */
-    getWidgetPropertyMetadata(name: string, attribute: string): TWWidgetProperty?;
+    getWidgetPropertyMetadata(name: string, attribute: string): TWWidgetProperty;
 
     /**
      * Invoked internally to mark the mashup as dirty and update its internal state.
@@ -941,14 +941,14 @@ declare abstract class TWRuntimeWidget extends TWWidget {
      * @param defaultValue      Defaults to `undefined`. An optional default value to return if this property doesn't yet have a value.
      * @return                  The property's value, or the value specified in the `defaultValue` parameter if the property hasn't yet been set.
      */
-    getProperty(name: string, defaultValue?: any?): any?;
+    getProperty(name: string, defaultValue?: any): any;
 
     /**
      * Sets the value of the given property.
      * @param name          The name of the property.
      * @param value         The new value to assign to the property. This value's type should match the property's base type.
      */
-    setProperty(name: string, value?: any?): void;
+    setProperty(name: string, value?: any): void;
 
     /**
      * Globally updates the selection of the given infotable property.
@@ -960,7 +960,7 @@ declare abstract class TWRuntimeWidget extends TWWidget {
      * @param preventEventTrigger       Defaults to false. If set to true, this update will not trigger the
      *                                  `SelectedRowsChanged` event of the service whose selection will be updated.
      */
-    updateSelection(property: string, selectedRowIndices: number[], preventEventTrigger?: boolean?): void;
+    updateSelection(property: string, selectedRowIndices: number[], preventEventTrigger?: boolean): void;
 
     /**
      * Invoked by the platform when the selection for one of this widget's bound infotable properties
@@ -1119,18 +1119,18 @@ declare abstract class TWRuntimeWidget extends TWWidget {
     showPopup(
         mashupName: string,
         parameters: Dictionary<any>,
-        callback?: (() => void)?,
-        paramChangeCallback?: ((name: string, value: any) => void)?,
-        modal?: boolean?,
-        popupTitle?: string?,
-        fixedPopupWidth?: number?,
-        fixedPopupHeight?: number?,
-        modalPopupOpacity?: number?,
-        isFullScreen?: boolean?,
-        dialogId?: string?,
-        showClose?: boolean?,
-        clickOutsideToClose?: boolean?,
-        dialogClass?: string?
+        callback?: (() => void),
+        paramChangeCallback?: ((name: string, value: any) => void),
+        modal?: boolean,
+        popupTitle?: string,
+        fixedPopupWidth?: number,
+        fixedPopupHeight?: number,
+        modalPopupOpacity?: number,
+        isFullScreen?: boolean,
+        dialogId?: string,
+        showClose?: boolean,
+        clickOutsideToClose?: boolean,
+        dialogClass?: string
     ): void;
 
     /**
@@ -1162,7 +1162,7 @@ declare abstract class TWRuntimeWidget extends TWWidget {
      * @param pushState             Defaults to `false`. If set to `true`, the platform will create a history state for this
      *                              new mashup.
      */
-    replacePageMashup(mashupName: string, parameters: Dictionary<any>, thisPropertyId: string, pushState?: boolean?);
+    replacePageMashup(mashupName: string, parameters: Dictionary<any>, thisPropertyId: string, pushState?: boolean);
 
     /**
      * Invoked by the platform to focus the first focusable element.
