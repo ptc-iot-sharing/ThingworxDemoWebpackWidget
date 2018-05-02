@@ -50,7 +50,7 @@ module.exports = function (env, argv) {
             new WidgetMetadataGenerator(),
             new DeclarationBundlerPlugin({
                 moduleName:`${packageJson.name}`,
-                out: path.join(`${packageJson.name}.d.ts`),
+                out: path.join('typings', `${packageJson.name}.d.ts`),
             }),
             // create the extension zip
             new ZipPlugin({
