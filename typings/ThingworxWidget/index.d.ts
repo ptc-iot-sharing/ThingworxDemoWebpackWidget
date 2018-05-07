@@ -1792,7 +1792,7 @@ declare interface X {
     Runtime: {
         [prop: string]: any;
         Widget: typeof TWRuntimeWidget;
-        Widgets: Dictionary<typeof TW.IDE.Widget>;
+        Widgets: Dictionary<typeof TW.Runtime.Widget>;
     }
 }
 declare const TW: X;
