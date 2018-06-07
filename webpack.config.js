@@ -51,6 +51,7 @@ module.exports = function (env, argv) {
             new DeclarationBundlerPlugin({
                 moduleName:`${packageJson.name}`,
                 out: path.join('typings', `${packageJson.name}.d.ts`),
+                excludePattern: new RegExp(`${packageJson.name}\.ide\.d\.ts`)
             }),
             // create the extension zip
             new ZipPlugin({
