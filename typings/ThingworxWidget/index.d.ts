@@ -448,9 +448,10 @@ declare abstract class TWWidget {
      * Returns the current value of the given property.
      * Subclasses are expected to not override this method.
      * @param property          The name of the property.
+     * @param defaultValue      An optional default value that will be returned if the property has not yet been assigned any value.
      * @return                  The property's value.
      */
-    getProperty(property: string): any;
+    getProperty(property: string, defaultValue?: any): any;
 
     /**
      * Sets the value of the given property.
@@ -565,7 +566,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * @return          The corresponding infotable. This may either be the name of an existing data shape
      *                  defined in the platform, or an object describing the data shape.
      */
-    getSourceDatashapeName?(name: string): string | TWDataShape;
+    getSourceDatashapeName?(name: string): string | Dictionary<TWFieldDefinition>;
 
     /**
      * This method is invoked by the platform to retrieve the data shape corresponding to
@@ -686,6 +687,13 @@ declare abstract class TWComposerWidget extends TWWidget {
     updateProperties({ updateUi }?: { updateUi?: boolean }): void;
 
     /**
+     * Should be invoked after the property structure of this widget has been updated and the
+     * properties table should be updated.
+     * Subclasses are expected to not override this method.
+     */
+    updatedProperties(): void;
+
+    /**
      * Returns the JSON representation of this widget.
      * Subclasses are expected to not override this method.
      * @return      An object.
@@ -743,7 +751,7 @@ declare abstract class TWComposerWidget extends TWWidget {
      * Subclasses are expected to not override this method.
      * @return          An array of property definitions.
      */
-    allWidgetProperties(): TWWidgetProperty[];
+    allWidgetProperties(): TWWidgetProperties;
 
     /**
      * Returns an array containing all of this widget's binding source properties.
@@ -893,6 +901,12 @@ declare abstract class TWComposerWidget extends TWWidget {
      */
     getWidgetIds(IDs: { [key: string]: number }): void;
 
+    /**
+     * Returns the data shape definition for the given property, if it is a bound infotable property.
+     * @param propertyName The name of the property.
+     */
+    getInfotableMetadataForProperty(propertyName: string): Dictionary<TWFieldDefinition> | undefined;
+
 }
 
 
@@ -902,6 +916,18 @@ declare abstract class TWComposerWidget extends TWWidget {
  * This is the Runtime variant of the widget type
  */
 declare abstract class TWRuntimeWidget extends TWWidget {
+
+    /**
+     * A property that is initialized to the automatically generated ID
+     * of the widget element.
+     */
+    idOfThisElement: string;
+
+    /**
+     * A property that is initialized to the automatically generated ID
+     * of the widget element.
+     */
+    jqElementId: string;
 
     /**
      * Returns a string representing the HTML content managed by this widget.
