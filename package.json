@@ -2,7 +2,7 @@
     "name": "demoWebpack",
     "version": "1.0.0",
     "description": "Example of a widget built using typescript, babel and webpack",
-    "thingworxServer": "http://localhost:8016/",
+    "thingworxServer": "http://localhost:8016",
     "thingworxUser": "Administrator",
     "thingworxPassword": "trUf6yuz2?_Gub",
     "author": "Thingworx RoIcenter",
