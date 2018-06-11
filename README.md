@@ -90,4 +90,6 @@ The following commands allow you to build and compile your widget:
 
 * [SVGViewer](http://roicentersvn/placatus/SvgViewerWidget): Allows viewing, interacting and manipulating SVG files in Thingworx. Contains examples of using external libraries.
 * [BMView](http://roicentersvn/BogdanMihaiciuc/BMView): Allows using BMView and constraint-based layouts in Thingworx.
+* [BMCollectionView](http://roicentersvn/BogdanMihaiciuc/BMCollectionView): Displays a highly customizable collection of reusable items.
+* [Calendar](http://roicentersvn/BogdanMihaiciuc/Calendar): A calendar widget for Thingworx built using the fullcalendar library.  Contains examples of using external libraries as well as referencing global external libraries without including them in the built package.
 * [mxDiagramViewer](http://roicentersvn/placatus/MxGraphDiagramWidget): Uses an much older version of this starter kit. Contains examples of using external libraries.
