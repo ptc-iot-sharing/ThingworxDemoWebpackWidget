@@ -34,7 +34,7 @@
         "clean-webpack-plugin": "^0.1.19",
         "copy-webpack-plugin": "^4.5.2",
         "css-loader": "^1.0.0",
-        "dtsbundler-webpack-plugin": "github:dmitry-mashkov/dtsbundler-webpack-plugin#8803fb6309a6451ac0fd747a25f385b8a539f833",
+        "dtsbundler-webpack-plugin": "github:stefan-lacatus/dtsbundler-webpack-plugin#master",
         "extract-text-webpack-plugin": "^3.0.2",
         "file-loader": "^2.0.0",
         "request": "^2.88.0",
