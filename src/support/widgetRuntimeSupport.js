@@ -262,3 +262,33 @@ export function ThingworxComposerWidget(widget) {
 
     TW.IDE.Widgets[widget.name] = widget;
 }
+
+/**
+ * Makes the given widget class available to Thingworx.
+ * @param name          The name with which the widget will be exported.
+ */
+export function TWNamedComposerWidget(name) {
+    return function (widget) {
+        // Thingworx attempts to change the prototype of the custom widget constructor
+        // which in addition to being a bad practice, prevents the usual prototype-based inheritance
+        // and prevents using the class-based syntax
+        Object.defineProperty(widget, 'prototype', { writable: false });
+
+        TW.IDE.Widgets[name] = widget;
+    }
+}
+
+/**
+ * Makes the given widget class available to Thingworx.
+ * @param name          The name with which the widget will be exported.
+ */
+export function TWNamedRuntimeWidget(name) {
+    return function (widget) {
+        // Thingworx attempts to change the prototype of the custom widget constructor
+        // which in addition to being a bad practice, prevents the usual prototype-based inheritance
+        // and prevents using the class-based syntax
+        Object.defineProperty(widget, 'prototype', { writable: false });
+
+        TW.Runtime.Widgets[name] = widget;
+    }
+}
