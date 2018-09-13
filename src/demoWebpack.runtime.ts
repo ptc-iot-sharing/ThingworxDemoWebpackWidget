@@ -1,4 +1,4 @@
-import { ThingworxRuntimeWidget, TWService, TWProperty } from 'widgetRuntimeSupport'
+import { ThingworxRuntimeWidget, TWService, TWProperty } from 'typescriptwebpacksupport'
 
 @ThingworxRuntimeWidget
 class DemoWebpackWidget extends TWRuntimeWidget {
