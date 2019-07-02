@@ -51,6 +51,6 @@
         "zip-webpack-plugin": "^3.0.0"
     },
     "dependencies": {
-        "typescriptwebpacksupport": "github:stefan-lacatus/ThingworxWidgetSupportPackage#master"
+        "typescriptwebpacksupport": "^2.0.0"
     }
 }
