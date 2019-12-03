@@ -1,20 +1,20 @@
 'use strict';
-var path = require('path');
-var fs = require('fs');
-var webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const UglifyJSPlugin = require('terser-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // enable cleaning of the build and zip directories
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // enable building of the widget
-var ZipPlugin = require('zip-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 // enable reading master data from the package.json file
-let packageJson = require('./package.json');
-var DeclarationBundlerPlugin = require('dtsbundler-webpack-plugin');
+const DeclarationBundlerPlugin = require('dtsbundler-webpack-plugin');
 // look if we are in initialization mode based on the --init argument
 const isInitialization = process.argv.indexOf('--env.init') !== -1;
 // look if we are in initialization mode based on the --init argument
 const uploadEnabled = process.argv.indexOf('--env.upload') !== -1;
+const packageJson = require('./package.json');
 
 // first, increment the version in package.json
 let packageVersion = packageJson.version.split('.');
@@ -45,7 +45,9 @@ module.exports = function (env, argv) {
         },
         plugins: [
             // delete build and zip folders
-            new CleanWebpackPlugin(['build', 'zip']),
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')]
+            }),        
             // in case we just want to copy some resources directly to the widget package, then do it here
             new CopyWebpackPlugin([{ from: 'src/static', to: 'static' }]),
             // in case the extension contains entities, copy them as well
@@ -117,7 +119,7 @@ module.exports = function (env, argv) {
         result.optimization = {
             minimizer: [
                 new UglifyJSPlugin({
-                    uglifyOptions: {
+                    terserOptions: {
                         beautify: false,
                         compress: true,
                         comments: false,
