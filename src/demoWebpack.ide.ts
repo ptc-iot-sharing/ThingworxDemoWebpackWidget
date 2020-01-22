@@ -44,7 +44,7 @@ class DemoWebpackWidget extends TWComposerWidget {
      * @return  The URL.
      */
     widgetIconUrl(): string {
-        return require('./images/icon.png');
+        return require('./images/icon.png').default;
     }
 
     /**
