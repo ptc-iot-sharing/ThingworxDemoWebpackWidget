@@ -85,7 +85,7 @@ The following commands allow you to build and compile your widget:
 
 * `yarn run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production environments.
 * `yarn run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for development, with source-maps enabled.
-* `yarn run watch`: watches the source files, and whenever they change, do a build.
+* `yarn run buidDev`: builds the development version of the widget. Creates a new extension zip file under the `zip` folder.The build is created for development, with source-maps enabled.
 
 ## Example of widgets that use this starter kit
 
