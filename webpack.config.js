@@ -2,10 +2,10 @@
 var path = require('path');
 var fs = require('fs');
 var webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 // enable cleaning of the build and zip directories
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // enable building of the widget
 var ZipPlugin = require('zip-webpack-plugin');
 // enable reading master data from the package.json file
@@ -45,8 +45,9 @@ module.exports = function (env, argv) {
         },
         plugins: [
             // delete build and zip folders
-            new CleanWebpackPlugin(['build', 'zip']),
-            // in case we just want to copy some resources directly to the widget package, then do it here
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')]
+            }),            // in case we just want to copy some resources directly to the widget package, then do it here
             new CopyWebpackPlugin([{ from: 'src/static', to: 'static' }]),
             // in case the extension contains entities, copy them as well
             new CopyWebpackPlugin([{ from: 'Entities/*.xml', to: '../../' }]),
@@ -116,14 +117,15 @@ module.exports = function (env, argv) {
     if (isProduction) {
         result.optimization = {
             minimizer: [
-                new UglifyJSPlugin({
-                    uglifyOptions: {
-                        beautify: false,
+                new TerserPlugin({
+                    cache: true,
+                    parallel: true,
+                    terserOptions: {
                         compress: true,
-                        comments: false,
                         mangle: false,
                         toplevel: false,
-                        keep_fnames: true
+                        keep_fnames: true,
+                        sourceMap: true
                     }
                 })
             ]
