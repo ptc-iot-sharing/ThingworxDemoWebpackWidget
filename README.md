@@ -1,6 +1,6 @@
 # Starter kit of a widget using webpack and typescript
 
-This repository contains an example that can act as a starter kit for building widget using modern web developement techniques like [webpack](https://webpack.js.org/) and [typescript](https://www.typescriptlang.org/) and [babel](https://babeljs.io/).
+This repository contains an example that can act as a starter kit for building widget using modern web development techniques like [webpack](https://webpack.js.org/) and [typescript](https://www.typescriptlang.org/) and [babel](https://babeljs.io/).
 
 ## Why use it
 
@@ -8,10 +8,10 @@ There are many advantages to this, and here's some of them:
 
 ### Webpack advantages
 
-* Because of *dynamic imports and require calls*, webpack can load javascript files and other resources only they are needed. So, if you are using a very big external library, this library is only loaded if the widget is used in a masup, rather than being always loaded in the `CombinedExtensions.js` files.
+* Because of *dynamic imports and require calls*, webpack can load javascript files and other resources only they are needed. So, if you are using a very big external library, this library is only loaded if the widget is used in a mashup, rather than being always loaded in the `CombinedExtensions.js` files.
 * *Better resource management*: You can load a resource (like images, xml files, css) only if it's used in the widget, and you'll no longer have to care about where to put it and how to package it. Also, the webpack loader will inline small files for better network performance.
 * *Automatic dependency management*: Webpack can be very easily integrated with the `npm` repositories, so this brings automatic dependency management. You'll no longer have to manually download libraries from the web, struggle to add all the dependencies and so on. Instead, `npm`, which functions similarly to maven central, handles all of this.
-* *Easily develop and test the widget outside of thingworx*: By doing the initial developent and testing in a simple html page, it reduces the waiting times of publishing widget, doing reloads, etc...
+* *Easily develop and test the widget outside of thingworx*: By doing the initial development and testing in a simple html page, it reduces the waiting times of publishing widget, doing reloads, etc...
 * *Allows using of different loaders*: You can develop your code in multiple languages, and use transpilers to convert you code javascript code that works in older javascript version. One of this languages, is typescript.
 
 ### Typescript
@@ -45,6 +45,7 @@ demoWebpackTypescriptWidget
 │   webpack.config.js // configuration for webpack
 │   metadata.xml      // thingworx metadata file for this widget. This is automatically generated based on your package.json
 │   index.html        // when testing the widget outside of thingworx, the index file used.
+└───Entities          // Thingworx XML entities that are part of the widget. This can be Things, StyleDefinitions, etc. They can be exported using the SourceControl export functionality in Thingworx.
 └───src               // main folder where your developement will take place
 │   │   index.ts               // source file used when testing the widget outside of twx
 │   │   demoWebpack.ide.ts     // source file for the Composer section of the widget
@@ -55,7 +56,7 @@ demoWebpackTypescriptWidget
 │   │   │   ...
 │   └───styles        // folder for css styles that you can import into your app using require statements
 │   └───images        // folder for image resources you are statically including using require statements
-│   └───static        // folder for resources that are copied over to the development extension. Think of folder of images that you referece only dynamicaly
+│   └───static        // folder for resources that are copied over to the development extension. Think of folder of images that you reference only dynamically
 └───build         // temporary folder used during compilation
 └───zip               // location of the built extension
 ```
@@ -69,27 +70,27 @@ In order to start developing a new widget using this template you need to do the
     git clone http://roicentersvn.ptcnet.ptc.com/placatus/DemoWebpackWidget.git
     ```
 2. Open `package.json` and configure the `name`, `description`, and other fields you find relevant
-3. Run `npm install`. This will install the development dependencies for this project.
-4. Run `npm run init`. This will create sample runtime and ide typescript files using the name.
+3. Run `yarn install`. This will install the development dependencies for this project.
+4. Run `yarn run init`. This will create sample runtime and ide typescript files using the name.
 5. Start working on your widget.
 
 ### Adding dependencies
 
-Dependencies can be added from [npm](https://www.npmjs.com/), using the `npm install DEPENDENCY_NAME --save` command, or by adding them directly to `package.json`, under `dependencies`. After adding them to `package.json`, you should run `npm install`.
-If you are using a javascript library that also has typescript mappings you can install those using `npm install --save @types/DEPENDENCY_NAME`.
+Dependencies can be added from [npm](https://www.npmjs.com/), using the `yarn install DEPENDENCY_NAME --save` command, or by adding them directly to `package.json`, under `dependencies`. After adding them to `package.json`, you should run `yarn install`.
+If you are using a javascript library that also has typescript mappings you can install those using `yarn install --save @types/DEPENDENCY_NAME`.
 
 ### Building and publishing
 
 The following commands allow you to build and compile your widget:
 
-* `npm run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production enviroments.
-* `npm run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for developement, with source-maps enabled.
-* `npm run watch`: watches the source files, and whenever they change, do a build.
+* `yarn run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production environments.
+* `yarn run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for development, with source-maps enabled.
+* `yarn run watch`: watches the source files, and whenever they change, do a build.
 
 ## Example of widgets that use this starter kit
 
-* [SVGViewer](http://roicentersvn/placatus/SvgViewerWidget): Allows viewing, interacting and manipulating SVG files in Thingworx. Contains examples of using external libraries.
-* [BMView](http://roicentersvn/BogdanMihaiciuc/BMView): Allows using BMView and constraint-based layouts in Thingworx.
-* [BMCollectionView](http://roicentersvn/BogdanMihaiciuc/BMCollectionView): Displays a highly customizable collection of reusable items.
-* [Calendar](http://roicentersvn/BogdanMihaiciuc/Calendar): A calendar widget for Thingworx built using the fullcalendar library.  Contains examples of using external libraries as well as referencing global external libraries without including them in the built package.
-* [mxDiagramViewer](http://roicentersvn/placatus/MxGraphDiagramWidget): Uses an much older version of this starter kit. Contains examples of using external libraries.
+* [SVGViewer](https://github.com/ptc-iot-sharing/SvgViewerWidgetTWX): Allows viewing, interacting and manipulating SVG files in Thingworx. Contains examples of using external libraries.
+* [BMView](https://github.com/ptc-iot-sharing/BMView): Allows using BMView and constraint-based layouts in Thingworx.
+* [BMCollectionView](https://github.com/ptc-iot-sharing/BMCollectionView): Displays a highly customizable collection of reusable items.
+* [Calendar](https://github.com/ptc-iot-sharing/CalendarWidgetTWX): A calendar widget for Thingworx built using the fullcalendar library.  Contains examples of using external libraries as well as referencing global external libraries without including them in the built package.
+* [mxDiagramViewer](https://github.com/ptc-iot-sharing/MXGraphDiagramWidgetTWX): Uses an much older version of this starter kit. Contains examples of using external libraries.
