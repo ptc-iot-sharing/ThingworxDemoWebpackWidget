@@ -1,4 +1,3 @@
 export const x = () => {
-  return 'bar';   
+  return "bar";
 };
-
