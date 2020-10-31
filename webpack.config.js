@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // enable cleaning of the build and zip directories
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -10,10 +10,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 // enable reading master data from the package.json file
 const DeclarationBundlerPlugin = require('dtsbundler-webpack-plugin');
-// look if we are in initialization mode based on the --init argument
-const isInitialization = process.argv.indexOf('--env.init') !== -1;
-// look if we are in initialization mode based on the --init argument
-const uploadEnabled = process.argv.indexOf('--env.upload') !== -1;
 const packageJson = require('./package.json');
 
 // first, increment the version in package.json
@@ -22,10 +18,14 @@ packageJson.version = `${packageVersion[0]}.${packageVersion[1]}.${parseInt(pack
 console.log(`Incremented package version to ${packageJson.version}`);
 fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 4));
 module.exports = function (env, argv) {
+    // look if we are in initialization mode based on the --init argument
+    const isInitialization = env.init == true;
+    // look if we are in initialization mode based on the --init argument
+    const uploadEnabled = env.upload == true;
     const packageName = packageJson.packageName || `${packageJson.name}_ExtensionPackage`;
 
     // look if we are in production or not based on the mode we are running in
-    const isProduction = argv.mode == "production";
+    const isProduction = argv.mode == 'production';
     let result = {
         entry: {
             // the entry point when viewing the index.html page
@@ -33,7 +33,7 @@ module.exports = function (env, argv) {
             // the entry point for the runtime widget
             widgetRuntime: `./src/${packageJson.name}.runtime.ts`,
             // the entry point for the ide widget
-            widgetIde: `./src/${packageJson.name}.ide.ts`
+            widgetIde: `./src/${packageJson.name}.ide.ts`,
         },
         output: {
             path: path.join(__dirname, 'build', 'ui', packageJson.name),
@@ -41,13 +41,17 @@ module.exports = function (env, argv) {
             chunkFilename: '[id].chunk.js',
             chunkLoadingGlobal: `webpackJsonp${packageJson.name}`,
             // this is the path when viewing the widget in thingworx
-            publicPath: `../Common/extensions/${packageName}/ui/${packageJson.name}/`
+            publicPath: `../Common/extensions/${packageName}/ui/${packageJson.name}/`,
+        },
+        devServer: {
+            publicPath: `/ui/${packageJson.name}/`,
+            port: 9011,
         },
         plugins: [
             // delete build and zip folders
             new CleanWebpackPlugin({
-                cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')]
-            }),        
+                cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')],
+            }),
             new CopyWebpackPlugin({
                 patterns: [
                     // in case we just want to copy some resources directly to the widget package, then do it here
@@ -61,13 +65,15 @@ module.exports = function (env, argv) {
             new DeclarationBundlerPlugin({
                 moduleName: `${packageJson.name}`,
                 out: path.join('typings', `${packageJson.name}.d.ts`),
-                excludePattern: new RegExp(`${packageJson.name}\.ide\.d\.ts`)
+                excludePattern: new RegExp(`${packageJson.name}\.ide\.d\.ts`),
             }),
             // create the extension zip
             new ZipPlugin({
                 path: path.join(__dirname, 'zip'), // a top level directory called zip
                 pathPrefix: `ui/${packageJson.name}/`, // path to the extension source code
-                filename: `${packageJson.name}-${isProduction ? 'min' : 'dev'}-${packageJson.version}.zip`,
+                filename: `${packageJson.name}-${isProduction ? 'min' : 'dev'}-${
+                    packageJson.version
+                }.zip`,
                 pathMapper: function (assetPath) {
                     // handles renaming of the budles
                     if (assetPath == 'widgetRuntime.bundle.js') {
@@ -78,15 +84,15 @@ module.exports = function (env, argv) {
                         return assetPath;
                     }
                 },
-                exclude: [/htmlDemo/, isProduction ? /(.*)\.map$/ : /a^/]
-            })
+                exclude: [/htmlDemo/, isProduction ? /(.*)\.map$/ : /a^/],
+            }),
         ],
         // if we are in development mode, then use "eval-source-map".
         // See https://webpack.js.org/configuration/devtool/ for all available options
         devtool: isProduction ? undefined : 'eval-source-map',
         resolve: {
             // Add '.ts' and '.tsx' as resolvable extensions.
-            extensions: ['.ts', '.tsx', '.js', '.json']
+            extensions: ['.ts', '.tsx', '.js', '.json'],
         },
 
         module: {
@@ -97,32 +103,34 @@ module.exports = function (env, argv) {
                     use: {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['@babel/preset-env']
-                        }
-                    }
+                            presets: ['@babel/preset-env'],
+                        },
+                    },
                 },
                 // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
                 {
                     test: /\.tsx?$/,
                     use: 'ts-loader',
-                    exclude: /node_modules/
+                    exclude: /node_modules/,
                 },
                 {
                     test: /\.(png|jp(e*)g|svg|xml)$/,
-                    use: [ {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 30000
-                        } 
-                    }]
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 30000,
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
-                }
-            ]
-        }
-    }
+                    use: ['style-loader', 'css-loader'],
+                },
+            ],
+        },
+    };
     // if we are in production, disable the minimizer
     if (isProduction) {
         result.optimization = {
@@ -134,10 +142,10 @@ module.exports = function (env, argv) {
                         mangle: false,
                         toplevel: false,
                         keep_fnames: true,
-                        sourceMap: true
-                    }
-                })
-            ]
+                        sourceMap: true,
+                    },
+                }),
+            ],
         };
     }
     // if we are in the initialization phase, do the renames
@@ -145,7 +153,7 @@ module.exports = function (env, argv) {
         result.plugins.unshift(new InitializeProject());
     }
 
-    function InitializeProject(options) { }
+    function InitializeProject(options) {}
 
     InitializeProject.prototype.apply = function (compiler) {
         compiler.hooks.run.tap('InitializeProjectPlugin', function () {
@@ -156,10 +164,13 @@ module.exports = function (env, argv) {
         });
     };
 
-    function WidgetMetadataGenerator(options) { }
+    function WidgetMetadataGenerator(options) {}
 
     WidgetMetadataGenerator.prototype.apply = function (compiler) {
-        compiler.hooks.emit.tapAsync('WidgetMetadataGeneratorPlugin', function (compilation, callback) {
+        compiler.hooks.emit.tapAsync('WidgetMetadataGeneratorPlugin', function (
+            compilation,
+            callback,
+        ) {
             // read the metadata xml file using xml2js
             let xml2js = require('xml2js');
             fs.readFile('metadata.xml', 'utf-8', function (err, data) {
@@ -170,18 +181,23 @@ module.exports = function (env, argv) {
                     // set the name of the extension package
                     result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.name = packageName;
                     // set the description from the package.json
-                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.description = packageJson.description;
+                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.description =
+                        packageJson.description;
                     // set the vendor using the author field in package json
-                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.vendor = packageJson.author;
+                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.vendor =
+                        packageJson.author;
                     // set the minimum thingworx version
                     result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.minimumThingWorxVersion =
                         packageJson.minimumThingWorxVersion;
                     // set the version of the package
-                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.packageVersion = packageJson.version;
+                    result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.packageVersion =
+                        packageJson.version;
                     // set the name of the widget itself
                     result.Entities.Widgets[0].Widget[0].$.name = packageJson.name;
                     if (packageJson.autoUpdate) {
-                        result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.buildNumber = JSON.stringify(packageJson.autoUpdate);
+                        result.Entities.ExtensionPackages[0].ExtensionPackage[0].$.buildNumber = JSON.stringify(
+                            packageJson.autoUpdate,
+                        );
                     }
                     // if there is no file resourse set, then we must add a node in the xml
                     if (!result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource) {
@@ -195,8 +211,8 @@ module.exports = function (env, argv) {
                             file: `${packageJson.name}.ide.bundle.js`,
                             description: '',
                             isDevelopment: 'true',
-                            isRuntime: 'false'
-                        }
+                            isRuntime: 'false',
+                        },
                     });
                     // add the runtime file
                     result.Entities.Widgets[0].Widget[0].UIResources[0].FileResource.push({
@@ -205,8 +221,8 @@ module.exports = function (env, argv) {
                             file: `${packageJson.name}.runtime.bundle.js`,
                             description: '',
                             isDevelopment: 'false',
-                            isRuntime: 'true'
-                        }
+                            isRuntime: 'true',
+                        },
                     });
                     // tranform the metadata back into xml
                     var builder = new xml2js.Builder();
@@ -219,7 +235,7 @@ module.exports = function (env, argv) {
                         },
                         size: function () {
                             return xml.length;
-                        }
+                        },
                     };
                     callback();
                 });
@@ -233,8 +249,8 @@ module.exports = function (env, argv) {
             new UploadToThingworxPlugin({
                 thingworxServer: packageJson.thingworxServer,
                 thingworxUser: packageJson.thingworxUser,
-                thingworxPassword: packageJson.thingworxPassword
-            })
+                thingworxPassword: packageJson.thingworxPassword,
+            }),
         );
     }
 
@@ -249,63 +265,74 @@ module.exports = function (env, argv) {
             console.log('Starting widget upload');
             let request = require('request');
             // remove the current version before uploading
-            request.post({
-                url: `${options.thingworxServer}/Thingworx/Subsystems/PlatformSubsystem/Services/DeleteExtensionPackage`,
-                headers: {
-                    'X-XSRF-TOKEN': 'TWX-XSRF-TOKEN-VALUE',
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-THINGWORX-SESSION': 'true'
-                },
-                body: { packageName: packageName },
-                json: true
-            },
-                function (err, httpResponse, body) {
-                    // load the file from the zip folder
-                    let formData = {
-                        file: fs.createReadStream(
-                            path.join(__dirname, 'zip', `${packageJson.name}-${isProduction ? 'min' : 'dev'}-${packageJson.version}.zip`)
-                        )
-                    };
-                    // POST request to the ExtensionPackageUploader servlet
-                    request
-                        .post(
-                            {
-                                url: `${options.thingworxServer}/Thingworx/ExtensionPackageUploader?purpose=import`,
-                                headers: {
-                                    'X-XSRF-TOKEN': 'TWX-XSRF-TOKEN-VALUE'
+            request
+                .post(
+                    {
+                        url: `${options.thingworxServer}/Thingworx/Subsystems/PlatformSubsystem/Services/DeleteExtensionPackage`,
+                        headers: {
+                            'X-XSRF-TOKEN': 'TWX-XSRF-TOKEN-VALUE',
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-THINGWORX-SESSION': 'true',
+                        },
+                        body: { packageName: packageName },
+                        json: true,
+                    },
+                    function (err, httpResponse, body) {
+                        // load the file from the zip folder
+                        let formData = {
+                            file: fs.createReadStream(
+                                path.join(
+                                    __dirname,
+                                    'zip',
+                                    `${packageJson.name}-${isProduction ? 'min' : 'dev'}-${
+                                        packageJson.version
+                                    }.zip`,
+                                ),
+                            ),
+                        };
+                        // POST request to the ExtensionPackageUploader servlet
+                        request
+                            .post(
+                                {
+                                    url: `${options.thingworxServer}/Thingworx/ExtensionPackageUploader?purpose=import`,
+                                    headers: {
+                                        'X-XSRF-TOKEN': 'TWX-XSRF-TOKEN-VALUE',
+                                    },
+                                    formData: formData,
                                 },
-                                formData: formData
-                            },
-                            function (err, httpResponse, body) {
-                                if (err) {
-                                    console.error("Failed to upload widget to thingworx");
-                                    throw err;
-                                }
-                                if (httpResponse.statusCode != 200) {
-                                    throw `Failed to upload widget to thingworx. We got status code ${httpResponse.statusCode} (${httpResponse.statusMessage})`;
-                                } else {
-                                    console.log(`Uploaded widget version ${packageJson.version} to Thingworx!`);
-                                }
-                            }
-                        )
-                        .auth(options.thingworxUser, options.thingworxPassword);
+                                function (err, httpResponse, body) {
+                                    if (err) {
+                                        console.error('Failed to upload widget to thingworx');
+                                        throw err;
+                                    }
+                                    if (httpResponse.statusCode != 200) {
+                                        throw `Failed to upload widget to thingworx. We got status code ${httpResponse.statusCode} (${httpResponse.statusMessage})`;
+                                    } else {
+                                        console.log(
+                                            `Uploaded widget version ${packageJson.version} to Thingworx!`,
+                                        );
+                                    }
+                                },
+                            )
+                            .auth(options.thingworxUser, options.thingworxPassword);
 
-                    if (err) {
-                        console.error("Failed to delete widget from thingworx");
-                        //throw err;
-                    }
-                    if (httpResponse.statusCode != 200) {
-                        console.log(`Failed to delete widget from thingworx. We got status code ${httpResponse.statusCode} (${httpResponse.statusMessage})
+                        if (err) {
+                            console.error('Failed to delete widget from thingworx');
+                            //throw err;
+                        }
+                        if (httpResponse.statusCode != 200) {
+                            console.log(`Failed to delete widget from thingworx. We got status code ${httpResponse.statusCode} (${httpResponse.statusMessage})
                     body:
                     ${httpResponse.body}`);
-                    } else {
-                        console.log(`Deleted previous version of ${packageName} from Thingworx!`);
-                    }
-                })
+                        } else {
+                            console.log(
+                                `Deleted previous version of ${packageName} from Thingworx!`,
+                            );
+                        }
+                    },
+                )
                 .auth(options.thingworxUser, options.thingworxPassword);
-
-
         });
     };
     return result;
