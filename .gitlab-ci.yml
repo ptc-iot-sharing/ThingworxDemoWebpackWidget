@@ -1,0 +1,31 @@
+image: node:latest
+
+
+cache:
+  paths: 
+    - node_modules/
+
+stages:
+  - build
+  - release
+
+Build:
+  stage: build
+  before_script:
+    - mkdir dist
+    - yarn install
+  script:
+    - yarn run build
+    - cp zip/* dist
+    - yarn run buildDev
+    - cp zip/* dist 
+  artifacts:
+    paths:
+    - dist/*
+
+Publish:
+  stage: release
+  script:
+    - npx semantic-release
+  only:
+    - release

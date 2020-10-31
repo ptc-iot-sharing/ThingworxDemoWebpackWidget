@@ -85,12 +85,21 @@ The following commands allow you to build and compile your widget:
 
 * `yarn run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production environments.
 * `yarn run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for development, with source-maps enabled.
-* `yarn run watch`: watches the source files, and whenever they change, do a build.
+* `yarn run buidDev`: builds the development version of the widget. Creates a new extension zip file under the `zip` folder.The build is created for development, with source-maps enabled.
 
 ## Example of widgets that use this starter kit
 
 * [SVGViewer](https://github.com/ptc-iot-sharing/SvgViewerWidgetTWX): Allows viewing, interacting and manipulating SVG files in Thingworx. Contains examples of using external libraries.
-* [BMView](https://github.com/ptc-iot-sharing/BMView): Allows using BMView and constraint-based layouts in Thingworx.
-* [BMCollectionView](https://github.com/ptc-iot-sharing/BMCollectionView): Displays a highly customizable collection of reusable items.
 * [Calendar](https://github.com/ptc-iot-sharing/CalendarWidgetTWX): A calendar widget for Thingworx built using the fullcalendar library.  Contains examples of using external libraries as well as referencing global external libraries without including them in the built package.
-* [mxDiagramViewer](https://github.com/ptc-iot-sharing/MXGraphDiagramWidgetTWX): Uses an much older version of this starter kit. Contains examples of using external libraries.
+
+## Sematic release
+
+The widget uses [semantic-release](https://semantic-release.gitbook.io/) and GitLab CI/CD pipelines for automatic version management and package publishing. This automates the whole widget release workflow including: determining the next version number, generating the release notes, updating the _CHANGELOG.MD_ and publishing a release. Please read through the *semantic-release* official documentation to better understand how it works.
+
+Because we are using *semantic-release* the commit messages must follow a specific format called [Angular commit conventions or Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). It is mandatory that this is followed. To help with this, the project is also setup with [commitizen](https://commitizen.github.io/cz-cli/) as a dev-dependency. So, you can use `git cz` instead of `git commit` to create a new commit.
+
+The repository should have one protected branch:
+
+* **master**: This is where the main development takes place. Each push to master is automatically built by the CI/CD pipeline and artifacts are generated.
+
+By default, this repository comes with two samples CI/CD configurations for both GitHub and GitLab. By default, the `.releaserc.json` triggers a GitHub release. If you want to use GitLab, rename `.releaserc-gitlab.json` to `.releaserc.json`.

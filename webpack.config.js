@@ -1,9 +1,9 @@
 'use strict';
-var path = require('path');
-var fs = require('fs');
-var webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // enable cleaning of the build and zip directories
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // enable building of the widget
@@ -39,7 +39,7 @@ module.exports = function (env, argv) {
             path: path.join(__dirname, 'build', 'ui', packageJson.name),
             filename: '[name].bundle.js',
             chunkFilename: '[id].chunk.js',
-            jsonpFunction: `webpackJsonp${packageJson.name}`,
+            chunkLoadingGlobal: `webpackJsonp${packageJson.name}`,
             // this is the path when viewing the widget in thingworx
             publicPath: `../Common/extensions/${packageName}/ui/${packageJson.name}/`
         },
@@ -47,11 +47,15 @@ module.exports = function (env, argv) {
             // delete build and zip folders
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')]
-            }),            
-            // in case we just want to copy some resources directly to the widget package, then do it here
-            new CopyWebpackPlugin([{ from: 'src/static', to: 'static' }]),
-            // in case the extension contains entities, copy them as well
-            new CopyWebpackPlugin([{ from: 'Entities/*.xml', to: '../../' }]),
+            }),        
+            new CopyWebpackPlugin({
+                patterns: [
+                    // in case we just want to copy some resources directly to the widget package, then do it here
+                    { from: 'src/static', to: 'static', noErrorOnMissing: true },
+                    // in case the extension contains entities, copy them as well
+                    { from: 'Entities/**/*.xml', to: '../../', noErrorOnMissing: true },
+                ],
+            }),
             // generates the metadata xml file and adds it to the archive
             new WidgetMetadataGenerator(),
             new DeclarationBundlerPlugin({
@@ -105,7 +109,12 @@ module.exports = function (env, argv) {
                 },
                 {
                     test: /\.(png|jp(e*)g|svg|xml)$/,
-                    loader: 'url-loader?limit=30000&name=images/[name].[ext]'
+                    use: [ {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 30000
+                        } 
+                    }]
                 },
                 {
                     test: /\.css$/,
@@ -119,7 +128,6 @@ module.exports = function (env, argv) {
         result.optimization = {
             minimizer: [
                 new TerserPlugin({
-                    cache: true,
                     parallel: true,
                     terserOptions: {
                         compress: true,
