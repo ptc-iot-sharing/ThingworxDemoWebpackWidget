@@ -26,6 +26,6 @@ Build:
 Publish:
   stage: release
   script:
-    - npx semantic-release --debug
+    - npx semantic-release
   only:
     - release

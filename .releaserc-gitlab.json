@@ -35,8 +35,9 @@
             }
         ],
         [
-            "@semantic-release/github",
+            "@semantic-release/gitlab",
             {
+                "gitlabUrl": "https://gitlab.com",
                 "assets": [
                     {
                         "path": "dist/*-min-*.zip",
