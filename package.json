@@ -4,17 +4,10 @@
     "description": "Example of a widget built using typescript, babel and webpack",
     "thingworxServer": "http://localhost:8016",
     "thingworxUser": "Administrator",
-    "thingworxPassword": "trUf6yuz2?_Gub",
-    "author": "Thingworx RoIcenter",
+    "thingworxPassword": "Administrator12345",
+    "author": "placatus@iqnox.com",
     "minimumThingWorxVersion": "6.0.0",
-    "homepage": "http://roicentersvn/placatus/DemoWebpackWidget",
-    "autoUpdate": {
-        "giteaURL": "http://roicentersvn/api/v1/repos/placatus/DemoWebpackWidget/releases/latest"
-    },
-    "repository": {
-        "type": "git",
-        "url": "http://roicentersvn.ptcnet.ptc.com/placatus/DemoWebpackWidget.git"
-    },
+    "homepage": "https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "check": "eslint --ext ts,tsx,js,css,scss src",
