@@ -1,10 +1,7 @@
-import { x } from "./babelExample";
+import { x } from './babelExample';
 
-export function createDataElement(
-  container: HTMLElement,
-  value: any
-): HTMLElement {
-  container.innerText = value;
-  let t = x(1);
-  return container;
+export function createDataElement(container: HTMLElement, value: string): HTMLElement {
+    const t = x(1);
+    container.innerText = value + t;
+    return container;
 }
