@@ -2048,6 +2048,15 @@ cliui@^5.0.0:
     strip-ansi "^5.2.0"
     wrap-ansi "^5.1.0"
 
+clone-deep@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-4.0.1.tgz#c19fd9bdbbf85942b4fd979c84dcf7d5f07c2387"
+  integrity sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==
+  dependencies:
+    is-plain-object "^2.0.4"
+    kind-of "^6.0.2"
+    shallow-clone "^3.0.0"
+
 clone-response@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/clone-response/-/clone-response-1.0.2.tgz#d1dc973920314df67fbeb94223b4ee350239e96b"
@@ -2559,9 +2568,18 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-"dtsbundler-webpack-plugin@github:stefan-lacatus/dtsbundler-webpack-plugin#master":
-  version "1.0.0"
-  resolved "https://codeload.github.com/stefan-lacatus/dtsbundler-webpack-plugin/tar.gz/a6bdb94effcc915cd85992bfab840454291b40ca"
+dotenv@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
+
+dts-bundle-generator@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/dts-bundle-generator/-/dts-bundle-generator-3.3.1.tgz#739ab39a87d3e0957ed8ec3bc005ffbaf026a62a"
+  integrity sha512-ePli14sf9223BwvaeuKpZYrlgAVJFf/OtZXLKtvs3khASEV62yXXN5QHpP2vRNCW7gNgxgTNPuM5G2d/N94oyw==
+  dependencies:
+    typescript ">=2.6.1"
+    yargs "~13.3.0"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -5887,6 +5905,13 @@ setprototypeof@1.1.1:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.1.1.tgz#7e95acb24aa92f5885e0abef5ba131330d4ae683"
   integrity sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
 
+shallow-clone@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/shallow-clone/-/shallow-clone-3.0.1.tgz#8f2981ad92531f55035b01fb230769a40e02efa3"
+  integrity sha512-/6KqX+GVUdqPuPPd2LxDDxzX6CAbjJehAAOKlNpqqUpAqPM6HeL8f+o3a+JsyGjn2lv0WY8UsTgUJjU9Ok55NA==
+  dependencies:
+    kind-of "^6.0.2"
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
@@ -6428,6 +6453,14 @@ tough-cookie@~2.5.0:
     psl "^1.1.28"
     punycode "^2.1.1"
 
+ts-declaration-webpack-plugin@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/ts-declaration-webpack-plugin/-/ts-declaration-webpack-plugin-1.2.3.tgz#08af8e73ebece917431f45b0071dd4eeb96a9e41"
+  integrity sha512-ayRUznR9WQlfoGw2+/NSfd+uTx9eJQdIlTIVKDr242vaDMBXrR3+ZTixdO+BClgGYbaJwHb0t4BvLTbdGidj5w==
+  dependencies:
+    dts-bundle-generator "^3.3.1"
+    loader-utils "^1.1.0"
+
 ts-loader@^8.0.7:
   version "8.0.7"
   resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-8.0.7.tgz#9ce70db5b3906cc9143a09c54ff5247d102ea974"
@@ -6498,7 +6531,7 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript@^4.0.5:
+typescript@>=2.6.1, typescript@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
   integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==
@@ -6773,6 +6806,14 @@ webpack-merge@^4.2.2:
   dependencies:
     lodash "^4.17.15"
 
+webpack-merge@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-5.3.0.tgz#a80df44d35fabace680bf430a19fda9ec49ed8eb"
+  integrity sha512-4PtsBAWnmJULIJYviiPq4BxwAykbAgGMheyEVaemj2bJI54h+p/gnlbXZEH2EM0IYC3blOE1Qm6kzKlc06N1UQ==
+  dependencies:
+    clone-deep "^4.0.1"
+    wildcard "^2.0.0"
+
 webpack-sources@^1.0.1, webpack-sources@^1.1.0, webpack-sources@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
@@ -6864,6 +6905,11 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
+wildcard@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/wildcard/-/wildcard-2.0.0.tgz#a77d20e5200c6faaac979e4b3aadc7b3dd7f8fec"
+  integrity sha512-JcKqAHLPxcdb9KM49dufGXn2x3ssnfjbcaQdLlfZsL9rH9wgDQjUtDxbo8NE0F6SFvydeu1VhZe7hZuHsB2/pw==
+
 word-wrap@^1.0.3, word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
@@ -6936,7 +6982,7 @@ yargs-parser@^13.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs@^13.3.2:
+yargs@^13.3.2, yargs@~13.3.0:
   version "13.3.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.3.2.tgz#ad7ffefec1aa59565ac915f82dccb38a9c31a2dd"
   integrity sha512-AX3Zw5iPruN5ie6xGRIDgqkT+ZhnRlZMLMHAs8tg7nRruy2Nb+i5o9bwghAogtM08q1dpr2LVoS8KSTMYpWXUw==
