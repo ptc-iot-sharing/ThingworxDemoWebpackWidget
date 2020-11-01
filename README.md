@@ -43,8 +43,11 @@ demoWebpackTypescriptWidget
 │   package.json      // here you specify project name, homepage and dependencies. This is the only file you should edit to start a new project
 │   tsconfig.json     // configuration for the typescript compiler
 │   webpack.config.js // configuration for webpack. Can be updated through the use of webpack-merge
-│   metadata.xml      // thingworx metadata file for this widget. This is automatically generated based on your package.json
 │   index.html        // when testing the widget outside of thingworx, the index file used.
+│   .env.sample       // sample file of how to declare the target ThingWorx server for automatic widget upload. Rename this file to .env
+│   .eslintrc.js      // eslint configuration for automatic file formatting
+│   .releaserc.json   // semantic-release sample configuration for publishing to GitHub Releases
+│   .releaserc-gitlab.json   // semantic-release sample configuration for publishing to GitLab Releases
 └───webpack           // Internal webpack configuration and plugins
 └───Entities          // Thingworx XML entities that are part of the widget. This can be Things, StyleDefinitions, etc. They can be exported using the SourceControl export functionality in Thingworx.
 └───src               // main folder where your developement will take place
@@ -85,7 +88,7 @@ If you are using a javascript library that also has typescript mappings you can 
 The following commands allow you to build and compile your widget:
 
 * `yarn run build`: builds the production version of the widget. Creates a new extension zip file under the `zip` folder. The production version is optimized for sharing and using in production environments.
-* `yarn run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `package.json`. The build is created for development, with source-maps enabled.
+* `yarn run upload`: creates a build, and uploads the extension zip to the thingworx server configured in `.env`. The build is created for development, with source-maps enabled.
 * `yarn run buidDev`: builds the development version of the widget. Creates a new extension zip file under the `zip` folder.The build is created for development, with source-maps enabled.
 
 ## Example of widgets that use this starter kit
