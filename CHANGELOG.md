@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.0.0...v1.0.1) (2020-11-01)
+
+
+### Bug Fixes
+
+* Fixed case sensitivity issue ([d093a6d](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/d093a6d694ff38114580c69b6405565da03630a6))
+* **build:** Remove the metadata.xml file and optimize the generator plugin ([417fd85](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/417fd8539663ff87ed25e80ec84e756d3b30fabf))
+
 # 1.0.0 (2020-11-01)
 
 
