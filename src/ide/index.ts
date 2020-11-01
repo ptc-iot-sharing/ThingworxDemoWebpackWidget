@@ -1,4 +1,5 @@
 // automatically import the css file
+import './ide.css';
 import {
     TWWidgetDefinition,
     autoResizable,
@@ -14,7 +15,7 @@ import {
     didSet,
 } from 'typescriptwebpacksupport/widgetIDESupport';
 
-import widgetIconUrl from './images/icon.png';
+import widgetIconUrl from '../images/icon.png';
 
 /**
  * The `@TWWidgetDefinition` decorator marks a class as a Thingworx widget. It can only be applied to classes

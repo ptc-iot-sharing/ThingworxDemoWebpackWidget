@@ -1,4 +1,4 @@
-import { createDataElement } from './internalLogic/internalLogic';
+import { createDataElement } from '../common/internalLogic';
 
 window.onload = function (): void {
     // Program starts here. Creates a sample graph in the

@@ -78,7 +78,7 @@ class DemoWebpackWidget extends TWRuntimeWidget {
      * The `jqElement` property will reference the correct element within this method.
      */
     async afterRender(): Promise<void> {
-        this.internalLogic = await import('./internalLogic/internalLogic');
+        this.internalLogic = await import('../common/internalLogic');
         this.jqElement[0].addEventListener('click', (event: MouseEvent): void => {
             this.timesClicked++;
             this.clicked();

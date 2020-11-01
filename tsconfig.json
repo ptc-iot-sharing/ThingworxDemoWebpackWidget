@@ -7,13 +7,16 @@
         "moduleResolution": "node",
         "target": "es5",
         "experimentalDecorators": true,
-        "typeRoots": ["./src/@types", "./node_modules/@types"],
+        "typeRoots": [
+            "./src/@types",
+            "./node_modules/@types"
+        ],
         "lib": [
             "es2015",
             "dom"
         ],
     },
     "include": [
-        "./src/*"
+        "./src/**/*"
     ]
 }

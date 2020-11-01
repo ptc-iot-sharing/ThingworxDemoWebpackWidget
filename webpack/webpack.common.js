@@ -10,15 +10,12 @@ const ZipPlugin = require('zip-webpack-plugin');
 // note that this is relative to the working directory, not to this file
 const packageJson = JSON.parse(fs.readFileSync('./package.json'));
 // import the extra plugins
-const InitializeProject = require('./initializeProjectPlugin');
 const UploadToThingworxPlugin = require('./uploadToThingworxPlugin');
 const WidgetMetadataGenerator = require('./widgetMetadataGeneratorPlugin');
 const ModuleSourceUrlUpdaterPlugin = require('./moduleSourceUrlUpdaterPlugin');
 
 module.exports = (env, argv) => {
-    // look if we are in initialization mode based on the --init argument
-    const isInitialization = env ? env.init : false;
-    // look if we are in initialization mode based on the --init argument
+    // look if we are in initialization mode based on the --upload argument
     const uploadEnabled = env ? env.upload : false;
     const packageName = packageJson.packageName || `${packageJson.name}_ExtensionPackage`;
     require('dotenv').config({ path: '.env' });
@@ -28,23 +25,23 @@ module.exports = (env, argv) => {
     const result = {
         entry: {
             // the entry point when viewing the index.html page
-            htmlDemo: './src/index.ts',
+            htmlDemo: './src/browser/index.ts',
             // the entry point for the runtime widget
-            widgetRuntime: `./src/${packageJson.name}.runtime.ts`,
+            widgetRuntime: `./src/runtime/index.ts`,
             // the entry point for the ide widget
-            widgetIde: `./src/${packageJson.name}.ide.ts`,
+            widgetIde: `./src/ide/index.ts`,
         },
         devServer: {
-            publicPath: `/ui/${packageJson.name}/`,
             port: 9011,
         },
         output: {
-            path: path.join(process.cwd(), 'build', 'ui', packageJson.name),
+            path: path.join(process.cwd(), 'build', 'ui', packageName),
             filename: '[name].bundle.js',
             chunkFilename: '[id].chunk.js',
-            chunkLoadingGlobal: `webpackJsonp${packageJson.name}`,
+            chunkLoadingGlobal: `webpackJsonp${packageName}`,
             // this is the path when viewing the widget in thingworx
-            publicPath: `../Common/extensions/${packageName}/ui/${packageJson.name}/`,
+            publicPath: `../Common/extensions/${packageName}/ui/${packageName}/`,
+            libraryTarget: 'window',
             devtoolNamespace: packageName,
         },
         plugins: [
@@ -167,11 +164,6 @@ module.exports = (env, argv) => {
             }),
         );
     }
-    // if we are in the initialization phase, do the renames
-    if (isInitialization) {
-        result.plugins.unshift(new InitializeProject());
-    }
-
     // if the upload is enabled, then add the uploadToThingworxPlugin with the credentials from package.json
     if (uploadEnabled) {
         result.plugins.push(
