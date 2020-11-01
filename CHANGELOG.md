@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.0.1...v1.1.0) (2020-11-01)
+
+
+### Bug Fixes
+
+* **deps:** Added proepr dependency to semantic-release ([3511ae2](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/3511ae2c5b0912d7f3add5182fd691217be7cd8f))
+
+
+### Features
+
+* Reorganized the naming of the default widget files, and remove the initialization step ([0a324fa](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/0a324fa89e402630c252a3e84f52ea69a51fc6e8))
+
 ## [1.0.1](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.0.0...v1.0.1) (2020-11-01)
 
 
