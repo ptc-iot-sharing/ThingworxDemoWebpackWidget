@@ -5,7 +5,7 @@ import {
     TWEvent,
     event,
     service,
-} from 'typescriptwebpacksupport/widgetruntimesupport';
+} from 'typescriptwebpacksupport/widgetRuntimeSupport';
 
 /**
  * The `@TWWidgetDefinition` decorator marks a class as a Thingworx widget. It can only be applied to classes

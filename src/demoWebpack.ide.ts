@@ -12,7 +12,7 @@ import {
     nonEditable,
     willSet,
     didSet,
-} from 'typescriptwebpacksupport/widgetidesupport';
+} from 'typescriptwebpacksupport/widgetIDESupport';
 
 import widgetIconUrl from './images/icon.png';
 
