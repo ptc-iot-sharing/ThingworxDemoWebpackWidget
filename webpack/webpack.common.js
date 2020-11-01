@@ -6,7 +6,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // enable building of the widget
 const ZipPlugin = require('zip-webpack-plugin');
-const TsDeclarationWebpackPlugin = require('ts-declaration-webpack-plugin');
 // enable reading master data from the package.json file
 // note that this is relative to the working directory, not to this file
 const packageJson = JSON.parse(fs.readFileSync('./package.json'));
@@ -63,10 +62,6 @@ module.exports = (env, argv) => {
             }),
             // generates the metadata xml file and adds it to the archive
             new WidgetMetadataGenerator({ packageName, packageJson }),
-            // new TsDeclarationWebpackPlugin({
-            //     name: '[name].d.ts', // Not required, '[name].d.ts' by default (to match output fileName)
-            //     test: /\.tsx$/, // Not required, filters '.ts' and '.tsx' by default
-            // }),
             // create the extension zip
             new ZipPlugin({
                 path: path.join(process.cwd(), 'zip'), // a top level directory called zip
