@@ -42,9 +42,10 @@ demoWebpackTypescriptWidget
 │   README.md         // this file
 │   package.json      // here you specify project name, homepage and dependencies. This is the only file you should edit to start a new project
 │   tsconfig.json     // configuration for the typescript compiler
-│   webpack.config.js // configuration for webpack
+│   webpack.config.js // configuration for webpack. Can be updated through the use of webpack-merge
 │   metadata.xml      // thingworx metadata file for this widget. This is automatically generated based on your package.json
 │   index.html        // when testing the widget outside of thingworx, the index file used.
+└───webpack           // Internal webpack configuration and plugins
 └───Entities          // Thingworx XML entities that are part of the widget. This can be Things, StyleDefinitions, etc. They can be exported using the SourceControl export functionality in Thingworx.
 └───src               // main folder where your developement will take place
 │   │   index.ts               // source file used when testing the widget outside of twx
