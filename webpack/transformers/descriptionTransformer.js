@@ -1,4 +1,4 @@
-import ts from 'typescript';
+const ts = require('typescript');
 
 /**
  * The name of the decorator that identifies a widget class.
@@ -26,7 +26,7 @@ const DESCRIPTION_DECORATOR = 'description';
  * The transformer will take the text of the first JSDoc tag that refers to each matching element and 
  * supply it as the argument for the description decorator.
  */
-export class DescriptionTransformer {
+class DescriptionTransformer {
 
     /**
      * 
@@ -53,13 +53,12 @@ export class DescriptionTransformer {
         // Getting the decorator name depends on whether the decorator is applied directly or via a
         // decorator factory.
         for (const decorator of node.decorators) {
-
             // In a decorator factory, the decorator itself is the result of invoking
             // the decorator factory function so it doesn't technically have a name; in this case the name
             // of the decorator factory function is considered to be the decorator name.
             if (decorator.expression.kind == ts.SyntaxKind.CallExpression) {
-                const callExpression = decorator.expression;
-                if (callExpression.expression.getText() == name) {
+                /** @type {ts.CallExpression} */ const callExpression = decorator.expression;
+                if (callExpression.expression.kind == ts.SyntaxKind.Identifier && callExpression.expression.text == name) {
                     return true;
                 }
             }
@@ -121,6 +120,8 @@ export class DescriptionTransformer {
         // The description is the JSDoc associated to the node, if there is one
         const documentation = ts.getJSDocCommentsAndTags(node);
         if (!documentation.length) return;
+
+        let description = '';
         
         // Get the first documentation node and use it as the description
         for (const documentationNode of documentation) {
@@ -152,7 +153,7 @@ export class DescriptionTransformer {
  * Returns a description transformer function.
  * @return      A transformer function.
  */
-export function DescriptionTransformerFactory() {
+function DescriptionTransformerFactory() {
     // Note that this function is currently useless, but can be used in the future to specify construction arguments
     return function DescriptionTransformerFunction(/** @type {ts.TransformationContext} */ context) {
         const transformer = new DescriptionTransformer(context);
@@ -160,3 +161,6 @@ export function DescriptionTransformerFactory() {
         return (/** @type {ts.Node} */ node) => ts.visitNode(node, node => transformer.visit(node));
     }
 }
+
+exports.DescriptionTransformer = DescriptionTransformer;
+exports.DescriptionTransformerFactory = DescriptionTransformerFactory;
