@@ -42,6 +42,11 @@ class DescriptionTransformer {
     context;
 
     /**
+     * Set to `true` if the file processed by this transformer is an IDE file.
+     */
+    isIDEFile = false;
+
+    /**
      * Checks whether the given node has a decorator or decorator factory with the given name.
      * @param {string} name         The name of the decorator to find.
      * @param {ts.Node} node        The node in which to search.
@@ -78,17 +83,29 @@ class DescriptionTransformer {
      * @return {ts.Node}            The visited node, or a new node that will replace it. 
      */
     visit(node) {
+        // The description decorator only makes sense for IDE files
+        // An IDE file is identified from its imports - it must import its Thingworx specific
+        // decorators from the widgetIDESupport package
+        if (node.kind == ts.SyntaxKind.ImportDeclaration) {
+            /** @type {ts.ImportDeclaration} */ const importNode = node;
+
+            /** @type {ts.StringLiteral} */ const module = importNode.moduleSpecifier;
+            if (module.text != 'typescriptwebpacksupport/widgetIDESupport') {
+                this.isIDEFile = true;
+            }
+        }
+
         // There are three kinds of nodes that are relevant to this transformer that will be handled here.
 
         // The first kind is a class declaration node
-        if (node.kind == ts.SyntaxKind.ClassDeclaration) {
+        if (node.kind == ts.SyntaxKind.ClassDeclaration && this.isIDEFile) {
             // Classes must have a `@TWWidgetDefinition` decorator and must not have a `@description` decorator in order to be considered
             if (this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node) && !this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                 this.addDescriptionDecoratorToNode(node);
             }
         }
         // The second kind is a property declaration node
-        else if (node.kind == ts.SyntaxKind.PropertyDeclaration) {
+        else if (node.kind == ts.SyntaxKind.PropertyDeclaration && this.isIDEFile) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
             if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
@@ -98,7 +115,7 @@ class DescriptionTransformer {
             }
         }
         // The final kind is a method declaration node
-        else if (node.kind == ts.SyntaxKind.MethodDeclaration) {
+        else if (node.kind == ts.SyntaxKind.MethodDeclaration && this.isIDEFile) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
             if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
