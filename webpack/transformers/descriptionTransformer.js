@@ -106,7 +106,32 @@ export class DescriptionTransformer {
      * @param {ts.Node} node        The node to add the description decorator to.
      */
     addDescriptionDecoratorToNode(node) {
+        // The description is the JSDoc associated to the node, if there is one
+        const documentation = ts.getJSDocCommentsAndTags(node);
+        if (!documentation.length) return;
+        
+        // Get the first documentation node and use it as the description
+        for (const documentationNode of documentation) {
+            if (documentationNode.kind = ts.SyntaxKind.JSDocComment) {
+                description = documentationNode.comment;
+                break;
+            }
+        }
 
+        // Return if the description is empty
+        if (!description) return;
+
+        // The description decorator is a decorator factory, so a call expression has to be created for it
+        const descriptionCall = this.context.factory.createCallExpression(
+            this.context.factory.createIdentifier(WIDGET_CLASS_DECORATOR),
+            undefined,
+            [this.context.factory.createStringLiteral(description, false)]
+        );
+
+        const decorator = this.context.factory.createDecorator(descriptionCall);
+
+        // Add the newly created decorator to the node
+        node.decorators.push(decorator);
     }
 
 }
