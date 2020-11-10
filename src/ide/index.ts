@@ -38,6 +38,10 @@ class DemoWebpackWidget extends TWComposerWidget {
      */
     @property('NUMBER', defaultValue(90)) width: number;
 
+    /**
+     * When the `@description` decorator is not used, the JSDoc documentation will be used as
+     * the description for the property.
+     */
     @property('NUMBER', defaultValue(30)) height: number;
 
     /**
