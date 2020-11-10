@@ -13,6 +13,7 @@ const packageJson = JSON.parse(fs.readFileSync('./package.json'));
 const UploadToThingworxPlugin = require('./uploadToThingworxPlugin');
 const WidgetMetadataGenerator = require('./widgetMetadataGeneratorPlugin');
 const ModuleSourceUrlUpdaterPlugin = require('./moduleSourceUrlUpdaterPlugin');
+const { DescriptionTransformerFactory } = require('./transformers/descriptionTransformer');
 
 module.exports = (env, argv) => {
     // look if we are in initialization mode based on the --upload argument
@@ -106,7 +107,16 @@ module.exports = (env, argv) => {
                 // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
                 {
                     test: /\.tsx?$/,
-                    use: 'ts-loader',
+                    use: [
+                        {
+                            loader: 'ts-loader',
+                            options: {
+                                getCustomTransformers: program => ({
+                                    before: [DescriptionTransformerFactory()]
+                                })
+                            }
+                        }
+                    ],
                     exclude: /node_modules/,
                 },
                 {
