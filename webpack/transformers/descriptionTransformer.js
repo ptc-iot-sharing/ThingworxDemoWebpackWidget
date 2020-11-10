@@ -7,6 +7,9 @@
  * 
  * It will also generate a description decorator for any class that has the `@TWWidgetDefinition` decorator applied to it.
  * 
+ * If a description decorator is already specified for an element, the transformer will skip creating an additional
+ * description decorator for that element.
+ * 
  * The transformer will take the text of the first JSDoc tag that refers to each matching element and 
  * supply it as the argument for the description decorator.
  */
