@@ -12,6 +12,7 @@ const DESCRIPTION_DECORATOR = 'description';
 
 /**
  * A typescript transformer that automatically generates description decorators from JSDoc tags.
+ * This transformer must be used in the `before` phase.
  * 
  * When used, a description decorator will be generated for a property or method that:
  *  - has either the `@property`, `@event` or `@service` decorator applied to it
@@ -26,6 +27,14 @@ const DESCRIPTION_DECORATOR = 'description';
  * supply it as the argument for the description decorator.
  */
 export class DescriptionTransformer {
+
+    /**
+     * 
+     * @param {ts.TransformationContext} context The transformation context.
+     */
+    constructor(context) {
+        this.context = context;
+    }
 
     /**
      * @type {ts.TransformationContext} The transformation context.
