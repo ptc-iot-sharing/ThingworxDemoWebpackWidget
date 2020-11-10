@@ -51,4 +51,26 @@ class DescriptionTransformer {
         return false;
     }
 
+    /**
+     * Visits the given node. This method will be invoked for all nodes in the file.
+     * @param {ts.Node} node        The node to visit.
+     * @return {ts.Node}            The visited node, or a new node that will replace it. 
+     */
+    visit(node) {
+        // There are three kinds of nodes that are relevant to this transformer that will be handled here.
+
+        // The first kind is a class declaration node
+        if (node.kind == ts.SyntaxKind.ClassDeclaration) {
+
+        }
+        // The second kind is a property declaration node
+        else if (node.kind == ts.SyntaxKind.PropertyDeclaration) {
+
+        }
+        // The final kind is a method declaration node
+        else if (node.kind == ts.SyntaxKind.MethodDeclaration) {
+            
+        }
+    }
+
 }
