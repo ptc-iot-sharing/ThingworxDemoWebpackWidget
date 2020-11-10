@@ -135,3 +135,11 @@ export class DescriptionTransformer {
     }
 
 }
+
+export function DescriptionTransformerFactory() {
+    return function DescriptionTransformerFunction(/** @type {ts.TransformationContext} */ context) {
+        const transformer = new DescriptionTransformer(context);
+
+        return (/** @type {ts.Node} */ node) => ts.visitNode(node, node => transformer.visit(node));
+    }
+}
