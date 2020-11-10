@@ -1,6 +1,16 @@
 const ts = require('typescript');
 
 /**
+ * The name of the decorator that identifies a widget class.
+ */
+const WIDGET_CLASS_DECORATOR = 'TWWidgetDefinition';
+
+/**
+ * The name of the decorator that supplioes descriptions.
+ */
+const DESCRIPTION_DECORATOR = 'description';
+
+/**
  * A typescript transformer that automatically generates description decorators from JSDoc tags.
  * 
  * When used, a description decorator will be generated for a property or method that:
@@ -62,7 +72,7 @@ class DescriptionTransformer {
         // The first kind is a class declaration node
         if (node.kind == ts.SyntaxKind.ClassDeclaration) {
             // Classes must have a `@TWWidgetDefinition` decorator and must not have a `@description` decorator in order to be considered
-            if (this.hasDecoratorNamed('TWWidgetDefinition', node) && !this.hasDecoratorNamed('description', node)) {
+            if (this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node) && !this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                 
             }
         }
@@ -70,8 +80,8 @@ class DescriptionTransformer {
         else if (node.kind == ts.SyntaxKind.PropertyDeclaration) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
-            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed('TWWidgetDefinition', node)) {
-                if (!this.hasDecoratorNamed('description', node)) {
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
+                if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
 
                 }
             }
@@ -80,8 +90,8 @@ class DescriptionTransformer {
         else if (node.kind == ts.SyntaxKind.MethodDeclaration) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
-            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed('TWWidgetDefinition', node)) {
-                if (!this.hasDecoratorNamed('description', node)) {
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
+                if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                     
                 }
             }
