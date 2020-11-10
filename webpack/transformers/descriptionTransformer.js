@@ -61,15 +61,30 @@ class DescriptionTransformer {
 
         // The first kind is a class declaration node
         if (node.kind == ts.SyntaxKind.ClassDeclaration) {
-
+            // Classes must have a `@TWWidgetDefinition` decorator and must not have a `@description` decorator in order to be considered
+            if (this.hasDecoratorNamed('TWWidgetDefinition', node) && !this.hasDecoratorNamed('description', node)) {
+                
+            }
         }
         // The second kind is a property declaration node
         else if (node.kind == ts.SyntaxKind.PropertyDeclaration) {
+            // Members must be part of a class that has the `@TWWidgetDefinition` decorator
+            // and must not have the `@description` decorator themselves
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed('TWWidgetDefinition', node)) {
+                if (!this.hasDecoratorNamed('description', node)) {
 
+                }
+            }
         }
         // The final kind is a method declaration node
         else if (node.kind == ts.SyntaxKind.MethodDeclaration) {
-            
+            // Members must be part of a class that has the `@TWWidgetDefinition` decorator
+            // and must not have the `@description` decorator themselves
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed('TWWidgetDefinition', node)) {
+                if (!this.hasDecoratorNamed('description', node)) {
+                    
+                }
+            }
         }
     }
 
