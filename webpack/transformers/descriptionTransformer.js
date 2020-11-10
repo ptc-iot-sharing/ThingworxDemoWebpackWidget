@@ -6,6 +6,21 @@ const ts = require('typescript');
 const WIDGET_CLASS_DECORATOR = 'TWWidgetDefinition';
 
 /**
+ * The name of the decorator that identifies a property.
+ */
+const WIDGET_PROPERRTY_DECORATOR = 'property';
+
+/**
+ * The name of the decorator that identifies an event.
+ */
+const WIDGET_EVENT_DECORATOR = 'event';
+
+/**
+ * The name of the decorator that identifies a service.
+ */
+const WIDGET_SERVICE_DECORATOR = 'service';
+
+/**
  * The name of the decorator that supplioes descriptions.
  */
 const DESCRIPTION_DECORATOR = 'description';
@@ -108,7 +123,9 @@ class DescriptionTransformer {
         else if (node.kind == ts.SyntaxKind.PropertyDeclaration && this.isIDEFile) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
-            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && (
+                this.hasDecoratorNamed(WIDGET_PROPERRTY_DECORATOR, node) || this.hasDecoratorNamed(WIDGET_EVENT_DECORATOR, node)
+            )) {
                 if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                     this.addDescriptionDecoratorToNode(node);
                 }
@@ -118,7 +135,7 @@ class DescriptionTransformer {
         else if (node.kind == ts.SyntaxKind.MethodDeclaration && this.isIDEFile) {
             // Members must be part of a class that has the `@TWWidgetDefinition` decorator
             // and must not have the `@description` decorator themselves
-            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
+            if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_SERVICE_DECORATOR, node)) {
                 if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                     this.addDescriptionDecoratorToNode(node);
                 }
@@ -153,7 +170,7 @@ class DescriptionTransformer {
 
         // The description decorator is a decorator factory, so a call expression has to be created for it
         const descriptionCall = this.context.factory.createCallExpression(
-            this.context.factory.createIdentifier(WIDGET_CLASS_DECORATOR),
+            this.context.factory.createIdentifier(DESCRIPTION_DECORATOR),
             undefined,
             [this.context.factory.createStringLiteral(description, false)]
         );
