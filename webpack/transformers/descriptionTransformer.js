@@ -108,6 +108,9 @@ export class DescriptionTransformer {
                 }
             }
         }
+
+        return ts.visitEachChild(node, node => this.visit(node), this.context);
+
     }
 
     /**
