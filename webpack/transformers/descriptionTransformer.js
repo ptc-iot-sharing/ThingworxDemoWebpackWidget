@@ -19,9 +19,9 @@ class DescriptionTransformer {
 
     /**
      * Checks whether the given node has a decorator or decorator factory with the given name.
-     * @param name      The name of the decorator to find.
-     * @param node      The node in which to search.
-     * @return          `true` if the decorator was found, `false` otherwise.
+     * @param {string} name         The name of the decorator to find.
+     * @param {ts.Node} node        The node in which to search.
+     * @return {boolean}            `true` if the decorator was found, `false` otherwise.
      */
     hasDecoratorNamed(name, node) {
         if (!node.decorators) return false;
@@ -29,7 +29,7 @@ class DescriptionTransformer {
         // Getting the decorator name depends on whether the decorator is applied directly or via a
         // decorator factory.
         for (const decorator of node.decorators) {
-            
+
             // In a decorator factory, the decorator itself is the result of invoking
             // the decorator factory function so it doesn't technically have a name; in this case the name
             // of the decorator factory function is considered to be the decorator name.
