@@ -145,7 +145,12 @@ export class DescriptionTransformer {
 
 }
 
+/**
+ * Returns a description transformer function.
+ * @return      A transformer function.
+ */
 export function DescriptionTransformerFactory() {
+    // Note that this function is currently useless, but can be used in the future to specify construction arguments
     return function DescriptionTransformerFunction(/** @type {ts.TransformationContext} */ context) {
         const transformer = new DescriptionTransformer(context);
 
