@@ -1,4 +1,4 @@
-const ts = require('typescript');
+import ts from 'typescript';
 
 /**
  * The name of the decorator that identifies a widget class.
@@ -25,9 +25,12 @@ const DESCRIPTION_DECORATOR = 'description';
  * The transformer will take the text of the first JSDoc tag that refers to each matching element and 
  * supply it as the argument for the description decorator.
  */
-class DescriptionTransformer {
+export class DescriptionTransformer {
 
-
+    /**
+     * @type {ts.TransformationContext} The transformation context.
+     */
+    context;
 
     /**
      * Checks whether the given node has a decorator or decorator factory with the given name.
@@ -73,7 +76,7 @@ class DescriptionTransformer {
         if (node.kind == ts.SyntaxKind.ClassDeclaration) {
             // Classes must have a `@TWWidgetDefinition` decorator and must not have a `@description` decorator in order to be considered
             if (this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node) && !this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
-                
+                this.addDescriptionDecoratorToNode(node);
             }
         }
         // The second kind is a property declaration node
@@ -82,7 +85,7 @@ class DescriptionTransformer {
             // and must not have the `@description` decorator themselves
             if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
                 if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
-
+                    this.addDescriptionDecoratorToNode(node);
                 }
             }
         }
@@ -92,10 +95,18 @@ class DescriptionTransformer {
             // and must not have the `@description` decorator themselves
             if (node.parent.kind == ts.SyntaxKind.ClassDeclaration && this.hasDecoratorNamed(WIDGET_CLASS_DECORATOR, node)) {
                 if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
-                    
+                    this.addDescriptionDecoratorToNode(node);
                 }
             }
         }
+    }
+
+    /**
+     * Adds the description decorator to the given node.
+     * @param {ts.Node} node        The node to add the description decorator to.
+     */
+    addDescriptionDecoratorToNode(node) {
+
     }
 
 }
