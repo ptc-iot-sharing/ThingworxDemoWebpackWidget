@@ -178,7 +178,7 @@ class DescriptionTransformer {
         const decorator = this.context.factory.createDecorator(descriptionCall);
 
         // Add the newly created decorator to the node
-        node.decorators.push(decorator);
+        node.decorators.unshift(decorator);
     }
 
 }
