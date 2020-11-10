@@ -1,3 +1,5 @@
+const ts = require('typescript');
+
 /**
  * A typescript transformer that automatically generates description decorators from JSDoc tags.
  * 
