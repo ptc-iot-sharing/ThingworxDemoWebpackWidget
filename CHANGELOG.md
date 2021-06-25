@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.0...v1.1.1) (2021-06-25)
+
+
+### Bug Fixes
+
+* Bump dependency versions ([7c8420b](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/7c8420bd063c898ce78da482c93eafefe469a4a7))
+* Improve documentation and provide additional links ([40eb014](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/40eb014db2eb8d06b103adbed3e2d0b90e4a3f6b))
+
 # [1.1.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.0.1...v1.1.0) (2020-11-01)
 
 
