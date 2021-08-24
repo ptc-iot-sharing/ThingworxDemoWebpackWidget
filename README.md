@@ -57,7 +57,7 @@ demoWebpackTypescriptWidget
 │   │   │   index.ts           // Contains the widget definition (properties, events, etc) used in the Mashup Builder
 │   └───runtime                // Folder containing the code that is used during Mashup Runtime. 
 │   │   │   index.ts           // Main file with the widget runtime logic, (eg. what happens when the a property changes)
-│   └───internalWidgetLogic    // Code that is shared across runtime, browser and ide
+│   └───common                 // Code that is shared across runtime, browser and ide
 │   │   │   file1.ts           // typescript file with internal logic
 │   │   │   file2.js           // javascript file in ES2015 with module
 │   │   │   ...
