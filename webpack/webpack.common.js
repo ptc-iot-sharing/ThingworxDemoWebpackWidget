@@ -33,6 +33,7 @@ module.exports = (env, argv) => {
         },
         devServer: {
             port: 9011,
+            publicPath: '/',
         },
         output: {
             path: path.join(process.cwd(), 'build', 'ui', packageName),
