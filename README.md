@@ -51,15 +51,18 @@ demoWebpackTypescriptWidget
 └───webpack           // Internal webpack configuration and plugins
 └───Entities          // ThingWorx XML entities that are part of the widget. This can be Things, StyleDefinitions, etc. They can be exported using the SourceControl export functionality in ThingWorx.
 └───src               // main folder where your development will take place
-│   │   index.ts               // source file used when testing the widget outside of twx
-│   │   demoWebpack.ide.ts     // source file for the Composer section of the widget
-│   │   demoWebpack.runtime.ts // source file for the Runtime section of the widget
-│   └───internalLogic          // usually, put the internal logic into a separate namespace
+│   └───browser                // If the widget is developed from an external library, or you want to be able to test it outside of thingworx
+│   │   │   index.ts           // Typescript file containing the necessary code to run the widget outside of thingworx, inside a browser
+│   └───ide                    // Folder containing the code that is used in the Mashup Builder
+│   │   │   index.ts           // Contains the widget definition (properties, events, etc) used in the Mashup Builder
+│   └───runtime                // Folder containing the code that is used during Mashup Runtime. 
+│   │   │   index.ts           // Main file with the widget runtime logic, (eg. what happens when the a property changes)
+│   └───internalWidgetLogic    // Code that is shared across runtime, browser and ide
 │   │   │   file1.ts           // typescript file with internal logic
 │   │   │   file2.js           // javascript file in ES2015 with module
 │   │   │   ...
-│   └───styles        // folder for css styles that you can import into your app using require statements
-│   └───images        // folder for image resources you are statically including using require statements
+│   └───styles        // folder for css styles that you can import into your app using import statements. This can also be within each scope (browser, ide, runtime)
+│   └───images        // folder for image resources you are statically including using import statements
 │   └───static        // folder for resources that are copied over to the development extension. Think of folder of images that you reference only dynamically
 └───build         // temporary folder used during compilation
 └───zip               // location of the built extension
