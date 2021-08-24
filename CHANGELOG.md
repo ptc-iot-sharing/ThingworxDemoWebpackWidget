@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.1...v1.1.2) (2021-08-24)
+
+
+### Bug Fixes
+
+* Resolve issue where the webpack dev server was using the incorrect public path ([700b9e8](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/700b9e861ddd0c38819c1c1d8f1382d7e3183e0e))
+
 ## [1.1.1](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.0...v1.1.1) (2021-06-25)
 
 
