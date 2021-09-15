@@ -59,7 +59,7 @@
         "zip-webpack-plugin": "^4.0.1"
     },
     "dependencies": {
-        "typescriptwebpacksupport": "^2.0.9"
+        "typescriptwebpacksupport": "^2.1.0"
     },
     "config": {
         "commitizen": {
