@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.2...v1.2.0) (2021-09-23)
+
+
+### Bug Fixes
+
+* Update dependencies ([d0c6ab0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/d0c6ab0077397b044a40dbc96bf0165bed45d5d7))
+
+
+### Features
+
+* Simplify webpack config by adopting the asset resources in webpack 5. Include an example for css in ide ([3059caa](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/3059caa682cdad7b7359f8857dcd35937fd7aedc))
+
 ## [1.1.2](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.1...v1.1.2) (2021-08-24)
 
 
