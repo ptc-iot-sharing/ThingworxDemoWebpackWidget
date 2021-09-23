@@ -87,11 +87,7 @@ module.exports = (env, argv) => {
             // Add '.ts' and '.tsx' as resolvable extensions.
             extensions: ['.ts', '.tsx', '.js', '.json'],
         },
-        externals: {
-            '@iqnox/widget-support-package/src/ide': 'IqnoxWidgetSupport',
-            '@iqnox/widget-support-package/src/runtime': 'IqnoxWidgetSupport',
-            '@iqnox/widget-configurator': 'IqnoxWidgetSupport',
-        },
+        externals: {},
         module: {
             rules: [
                 {
@@ -109,34 +105,23 @@ module.exports = (env, argv) => {
                     test: /\.tsx?$/,
                     use: 'ts-loader',
                     exclude: /node_modules/,
+                    resourceQuery: { not: [/raw/] },
                 },
                 {
-                    test: /\.(png|jp(e*)g|svg|xml)$/,
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 30000,
-                            },
-                        },
-                    ],
+                    test: /\.(png|jp(e*)g|svg|xml|d\.ts|ttf)$/,
+                    type: 'asset',
+                },
+                {
+                    resourceQuery: /raw/,
+                    type: 'asset/source',
+                },
+                {
+                    resourceQuery: /inline/,
+                    type: 'asset/inline',
                 },
                 {
                     test: /\.css$/,
-                    use: [
-                        {
-                            loader: 'style-loader',
-                            options: {
-                                injectType: 'linkTag',
-                                attributes: {
-                                    'data-description': `Styles for IQNOX widget ${packageName}`,
-                                },
-                            },
-                        },
-                        'file-loader',
-                        'extract-loader',
-                        'css-loader',
-                    ],
+                    use: ['style-loader', 'css-loader']
                 },
             ],
         },
