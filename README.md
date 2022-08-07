@@ -83,8 +83,8 @@ In order to start developing a new widget using this template you need to do the
 
 ### Adding dependencies
 
-Dependencies can be added from [npm](https://www.npmjs.com/), using the `yarn install DEPENDENCY_NAME --save` command, or by adding them directly to `package.json`, under `dependencies`. After adding them to `package.json`, you should run `yarn install`.
-If you are using a javascript library that also has typescript mappings you can install those using `yarn install --save @types/DEPENDENCY_NAME`.
+Dependencies can be added from [npm](https://www.npmjs.com/), using the `yarn add DEPENDENCY_NAME` command, or by adding them directly to `package.json`, under `dependencies`. After adding them to `package.json`, you should run `yarn install`.
+If you are using a javascript library that also has typescript mappings you can install those using `yarn add @types/DEPENDENCY_NAME`.
 
 ### Building and publishing
 
