@@ -1,3 +1,11 @@
-.test {
-  color: red;
+/**
+* This CSS will apply in the mashup builder
+**/
+.widget-demo-viewer::after {
+  background-image: url(../images/icon.svg);
+  content: ' ';
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
 }

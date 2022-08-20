@@ -15,7 +15,7 @@ import {
     didSet,
 } from 'typescriptwebpacksupport/widgetIDESupport';
 
-import widgetIconUrl from '../images/icon.png';
+import widgetIconUrl from '../images/icon.svg';
 
 /**
  * The `@TWWidgetDefinition` decorator marks a class as a Thingworx widget. It can only be applied to classes
