@@ -13,6 +13,7 @@ import {
     nonEditable,
     willSet,
     didSet,
+    displayName,
 } from 'typescriptwebpacksupport/widgetIDESupport';
 
 import widgetIconUrl from '../images/icon.svg';
@@ -61,9 +62,12 @@ class DemoWebpackWidget extends TWComposerWidget {
     /**
      * The `@description` decorator can be applied before widget definitions and property, event or service decorators to specify
      * the description of the decorated class member. That description will appear in the composer.
+     *
+     * A `displayName` aspect may be used to give the property a friendly name with which it will be rendered in the properties
+     * pane in the mashup builder.
      */
     @description('Tracks how many times the widget was clicked')
-    @property('NUMBER', bindingSource, nonEditable)
+    @property('NUMBER', bindingSource, nonEditable, displayName('Clicked Amount'))
     clickedAmount: number;
 
     /**
