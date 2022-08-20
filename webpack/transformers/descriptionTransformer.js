@@ -140,7 +140,8 @@ class DescriptionTransformer {
             if (
                 node.parent.kind == ts.SyntaxKind.ClassDeclaration &&
                 (this.hasDecoratorNamed(WIDGET_PROPERRTY_DECORATOR, node) ||
-                    this.hasDecoratorNamed(WIDGET_EVENT_DECORATOR, node))
+                    this.hasDecoratorNamed(WIDGET_EVENT_DECORATOR, node) ||
+                    this.hasDecoratorNamed(WIDGET_SERVICE_DECORATOR, node))
             ) {
                 if (!this.hasDecoratorNamed(DESCRIPTION_DECORATOR, node)) {
                     return this.addDescriptionDecoratorToNode(node);
