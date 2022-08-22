@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.2.0...v1.3.0) (2022-08-22)
+
+
+### Features
+
+* Generate automatic descriptions from javadoc for widget properties, services and classes ([#47](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/issues/47)) ([323fb21](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/323fb21271e1dd4dbeaf5cee105d45e2cabea2f9))
+
 # [1.2.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.1.2...v1.2.0) (2021-09-23)
 
 
