@@ -1,21 +1,24 @@
-const path = require('path');
-const fs = require('fs');
-const TerserPlugin = require('terser-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import * as path from 'path';
+import * as fs from 'fs';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 // enable cleaning of the build and zip directories
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 // enable building of the widget
-const ZipPlugin = require('zip-webpack-plugin');
+import ZipPlugin from 'zip-webpack-plugin';
 // enable reading master data from the package.json file
 // note that this is relative to the working directory, not to this file
-const packageJson = JSON.parse(fs.readFileSync('./package.json'));
 // import the extra plugins
-const UploadToThingworxPlugin = require('./uploadToThingworxPlugin');
-const WidgetMetadataGenerator = require('./widgetMetadataGeneratorPlugin');
-const ModuleSourceUrlUpdaterPlugin = require('./moduleSourceUrlUpdaterPlugin');
-const { DescriptionTransformerFactory } = require('./transformers/descriptionTransformer');
+import { UploadToThingworxPlugin } from './uploadToThingworxPlugin';
+import { WidgetMetadataGenerator } from './widgetMetadataGeneratorPlugin';
+import { ModuleSourceUrlUpdaterPlugin } from './moduleSourceUrlUpdaterPlugin';
+import webpack from 'webpack';
+import { EsbuildPlugin } from 'esbuild-loader';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { WebpackConfiguration } from 'webpack-dev-server';
 
-module.exports = (env, argv) => {
+const packageJson = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
+
+export function createConfig(env, argv): WebpackConfiguration {
     // look if we are in initialization mode based on the --upload argument
     const uploadEnabled = env ? env.upload : false;
     const packageName = packageJson.packageName || `${packageJson.name}_ExtensionPackage`;
@@ -34,7 +37,6 @@ module.exports = (env, argv) => {
         },
         devServer: {
             port: 9011,
-            publicPath: '/',
         },
         output: {
             path: path.join(process.cwd(), 'build', 'ui', packageName),
@@ -43,10 +45,13 @@ module.exports = (env, argv) => {
             chunkLoadingGlobal: `webpackJsonp${packageName}`,
             // this is the path when viewing the widget in thingworx
             publicPath: `../Common/extensions/${packageName}/ui/${packageName}/`,
-            libraryTarget: 'window',
             devtoolNamespace: packageName,
         },
         plugins: [
+            new ForkTsCheckerWebpackPlugin(),
+            new webpack.DefinePlugin({
+                VERSION: JSON.stringify(packageJson.version),
+            }),
             // delete build and zip folders
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [path.resolve('build/**'), path.resolve('zip/**')],
@@ -57,6 +62,12 @@ module.exports = (env, argv) => {
                     { from: 'src/static', to: 'static', noErrorOnMissing: true },
                     // in case the extension contains entities, copy them as well
                     { from: 'Entities/**/*.xml', to: '../../', noErrorOnMissing: true },
+                    // Include the license document in the package
+                    { from: 'LICENSE.MD', to: '../../LICENSE.MD', noErrorOnMissing: true },
+                    // Include the customer facing changelog in the package
+                    { from: 'CHANGELOG.MD', to: '../../CHANGELOG.MD', noErrorOnMissing: true },
+                    // Include a customer facing README.MD file with general information
+                    { from: 'README_EXTERNAL.MD', to: '../../README.MD', noErrorOnMissing: true },
                 ],
             }),
             // generates the metadata xml file and adds it to the archive
@@ -65,7 +76,7 @@ module.exports = (env, argv) => {
             new ZipPlugin({
                 path: path.join(process.cwd(), 'zip'), // a top level directory called zip
                 pathPrefix: `ui/${packageName}/`, // path to the extension source code
-                filename: `${packageName}-${isProduction ? 'min' : 'dev'}-${
+                filename: `${packageName}-${isProduction ? 'prod' : 'dev'}-v${
                     packageJson.version
                 }.zip`,
                 pathMapper: (assetPath) => {
@@ -88,67 +99,69 @@ module.exports = (env, argv) => {
             // Add '.ts' and '.tsx' as resolvable extensions.
             extensions: ['.ts', '.tsx', '.js', '.json'],
         },
-        externals: {},
+        // enable a filesystem cache to speed up individual upload commands
+        cache: {
+            type: 'filesystem',
+            compression: 'gzip',
+        },
         module: {
             rules: [
                 {
-                    test: /(\.jsx|\.js)$/,
-                    exclude: /(node_modules|bower_components)/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-env'],
-                        },
-                    },
+                    // Match js, jsx, ts & tsx files
+                    test: /\.[jt]sx?$/,
+                    loader: 'esbuild-loader',
                 },
-                // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
                 {
-                    test: /\.tsx?$/,
+                    test: /\.scss$/,
                     use: [
                         {
-                            loader: 'ts-loader',
+                            loader: 'style-loader',
                             options: {
-                                getCustomTransformers: program => ({
-                                    before: [DescriptionTransformerFactory()]
-                                })
-                            }
-                        }
+                                attributes: {
+                                    'data-description': `Styles for widget ${packageName}`,
+                                },
+                            },
+                        },
+                        'css-loader',
+                        'sass-loader',
                     ],
-                    exclude: /node_modules/,
-                    resourceQuery: { not: [/raw/] },
-                },
-                {
-                    test: /\.(png|jp(e*)g|svg|xml|d\.ts|ttf)$/,
-                    type: 'asset',
-                },
-                {
-                    resourceQuery: /raw/,
-                    type: 'asset/source',
-                },
-                {
-                    resourceQuery: /inline/,
-                    type: 'asset/inline',
                 },
                 {
                     test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
+                    use: [
+                        {
+                            loader: 'style-loader',
+                            options: {
+                                attributes: {
+                                    'data-description': `Styles for widget ${packageName}`,
+                                },
+                            },
+                        },
+                        'css-loader',
+                        {
+                            loader: 'esbuild-loader',
+                            options: {
+                                minify: true,
+                            },
+                        },
+                    ],
+                },
+                {
+                    test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2|xml)$/i,
+                    // More information here https://webpack.js.org/guides/asset-modules/
+                    type: 'asset',
                 },
             ],
         },
-    };
-    // if we are in production, disable the minimizer
+    } satisfies WebpackConfiguration;
+    // if we are in production, enable the minimizer
     if (isProduction) {
-        result.optimization = {
+        (result as WebpackConfiguration).optimization = {
             minimizer: [
-                new TerserPlugin({
-                    parallel: true,
-                    terserOptions: {
-                        compress: true,
-                        mangle: false,
-                        toplevel: false,
-                        keep_fnames: true,
-                        sourceMap: true,
-                    },
+                new EsbuildPlugin({
+                    minify: true,
+                    target: 'es2015',
+                    minifyIdentifiers: false,
                 }),
             ],
         };
@@ -164,9 +177,9 @@ module.exports = (env, argv) => {
     if (uploadEnabled) {
         result.plugins.push(
             new UploadToThingworxPlugin({
-                thingworxServer: process.env.TARGET_THINGWORX_SERVER,
-                thingworxUser: process.env.TARGET_THINGWORX_USER,
-                thingworxPassword: process.env.TARGET_THINGWORX_PASSWORD,
+                thingworxServer: process.env.TARGET_THINGWORX_SERVER ?? '',
+                thingworxUser: process.env.TARGET_THINGWORX_USER ?? '',
+                thingworxPassword: process.env.TARGET_THINGWORX_PASSWORD ?? '',
                 packageVersion: packageJson.version,
                 packageName: packageName,
                 isProduction: isProduction,
@@ -175,4 +188,4 @@ module.exports = (env, argv) => {
     }
 
     return result;
-};
+}

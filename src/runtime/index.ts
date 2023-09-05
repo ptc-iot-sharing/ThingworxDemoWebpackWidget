@@ -71,7 +71,7 @@ class DemoWebpackWidget extends TWRuntimeWidget {
         return `<div class="widget-content widget-demo">${this.value}</div>`;
     }
 
-    internalLogic;
+    internalLogic: typeof import('../common/internalLogic');
 
     /**
      * Invoked after the widget's HTML element has been created.
