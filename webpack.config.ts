@@ -3,7 +3,10 @@ import { createConfig } from './webpack/webpack.common';
 
 module.exports = (env, argv) =>
     mergeWithCustomize({
-        customizeObject: customizeObject({ entry: 'replace', externals: 'replace' }),
+        customizeObject: customizeObject({
+            entry: 'replace',
+            externals: 'replace',
+        }),
     })(createConfig(env, argv), {
         entry: {
             // the entry point when viewing the index.html page
