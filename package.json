@@ -1,6 +1,6 @@
 {
     "name": "demo_thingworx_webpack_widget",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "description": "Example of a widget built using typescript, babel and webpack",
     "packageName": "demoWebpackWidget",
     "author": "placatus@iqnox.com",

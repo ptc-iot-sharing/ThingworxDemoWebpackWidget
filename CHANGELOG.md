@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.3.0...v1.4.0) (2023-09-07)
+
+
+### Features
+
+* Update all widget dependencies, switch to configs in typescript, use esbuild for transforming code, improve eslint rules ([3e1cca3](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/3e1cca3b36650fb8fef14d3329aefc80cf215d1d))
+
 # [1.3.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.2.0...v1.3.0) (2022-08-22)
 
 
