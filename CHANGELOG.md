@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.4.0...v1.4.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* trigger a new release, with a production build ([2b998cf](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/commit/2b998cf2ffb464d8f4f73e40651818c8a242df09))
+
 # [1.4.0](https://github.com/ptc-iot-sharing/ThingworxDemoWebpackWidget/compare/v1.3.0...v1.4.0) (2023-09-07)
 
 
