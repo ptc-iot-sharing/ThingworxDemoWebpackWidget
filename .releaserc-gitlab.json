@@ -40,8 +40,8 @@
                 "gitlabUrl": "https://gitlab.com",
                 "assets": [
                     {
-                        "path": "dist/*-min-*.zip",
-                        "label": "Minified version"
+                        "path": "dist/*-prod-*.zip",
+                        "label": "Production version"
                     },
                     {
                         "path": "dist/*-dev-*.zip",
